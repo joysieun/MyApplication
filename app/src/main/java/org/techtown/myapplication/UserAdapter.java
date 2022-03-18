@@ -23,8 +23,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     //사용자 기록 time
     String time="";
     //DB
-    PetResultDB helper;
-    ArrayList<PetResult> info = new ArrayList<PetResult>();
+    ResultDB helper;
+    ArrayList<Result> info = new ArrayList<Result>();
     AlertDialog.Builder builder;
 
 
@@ -42,7 +42,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, int position) {
-        PetResult inforamtion = info.get(position);
+        Result inforamtion = info.get(position);
         holder.setInfo(inforamtion);
 
         holder.cardView.setOnClickListener(new View.OnClickListener(){
@@ -51,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view) {
                 Context context = view.getContext();
 
-                helper = new PetResultDB(context.getApplicationContext());
+                helper = new ResultDB(context.getApplicationContext(),"Result.db", null,2);
 
                 //선택한 기록 날짜 담기
                 time = info.get(holder.getAdapterPosition()).getTime();
@@ -65,7 +65,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         deleteItem(holder.getAdapterPosition());
                         notifyDataSetChanged();
-                        helper.delete(time);
+
+                        helper.deletetime(time);
                     }
 
                 });
@@ -87,9 +88,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return info.size();
     }
-    public void addItem(PetResult pr){
+    public void addItem(Result pr){
         info.add(pr);
     }
 
@@ -106,10 +107,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder{
 
 
-        TextView tpetname;
-        TextView ttime;
-        ImageView imgskin;
-        CardView cardView;
+        private TextView tpetname;
+        private TextView ttime;
+        private ImageView imgskin;
+        private CardView cardView;
 
         public ViewHolder(View infoView){
             super(infoView);
@@ -119,7 +120,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             imgskin = infoView.findViewById(R.id.skin_user);
             cardView = infoView.findViewById(R.id.card);
         }
-        public void setInfo(PetResult pr){
+        public void setInfo(Result pr){
             tpetname.setText(pr.getPetname());
             ttime.setText(pr.getTime());
             Bitmap bt = BitmapFactory.decodeByteArray(pr.getPet_image(),0,pr.getPet_image().length);

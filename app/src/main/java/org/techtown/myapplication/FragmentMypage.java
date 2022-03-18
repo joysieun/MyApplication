@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class FragmentMypage extends Fragment {
 
     RecyclerView recyclerView;
     private UserAdapter adapter;
+    ArrayList<Result> resultList = new ArrayList<>();
 
     TextView tv;
 
@@ -46,21 +48,27 @@ public class FragmentMypage extends Fragment {
     }
 
     private void getUserList(){
-
+        println("<<<getUserList()>>>");
         adapter.removeAllItem();
-        final PetResultDB petResultDB = new PetResultDB(getActivity());
-        Cursor cursor = petResultDB.getUserList();
-        int count = 0;
+        final ResultDB resultDB = new ResultDB(getActivity().getApplicationContext(), "Result.db",null,2);
+        Cursor cursor = resultDB.getUserList();
+        int count=0;
         while(cursor.moveToNext()){
-            PetResult pr = new PetResult();
-            pr.setPet_image(cursor.getBlob(4));
-            pr.setPetname(cursor.getString(3));
-            pr.setTime(cursor.getString(6));
-            adapter.addItem(pr);
+            Result result = new Result();
+            result.setUserid(cursor.getString(0));
+            result.setPetname(cursor.getString(1));
+            result.setSkinresult(cursor.getString(2));
+            result.setTime(cursor.getString(3));
+            result.setPet_image(cursor.getBlob(4));
+            adapter.addItem(result);
             count++;
         }
-        adapter.notifyDataSetChanged();
 
+        adapter.notifyDataSetChanged();
+        println("회원수:: "+ adapter.getItemCount());
+    }
+    public void println(String msg){
+        Log.d("mypage",msg);
     }
     }
 

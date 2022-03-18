@@ -55,23 +55,7 @@ public class Register extends AppCompatActivity {
                     String id = editid.getText().toString();
                     String pwd = editpwd.getText().toString();
 
-                    String sql = "select * from petanduser_info where u_id = '"+id+"'";
-
-                    Cursor cursor = db.rawQuery(sql,null);
-                    if(cursor.getCount() ==1){
-                        //해당 아이디가 이미 있음
-                        Toast.makeText(Register.this, "이미존재하는 아이디입니다.",Toast.LENGTH_SHORT).show();
-                        editid.setText(null);
-                        editpwd.setText(null);
-                    }
-                    else{
-                        String sql2 = "insert into petanduser_info(u_id, u_pwd, u_name) values('"+id+"','"+pwd+"','"+name+"')";
-                        db.execSQL(sql2);
-
-                        Toast.makeText(Register.this, "회원가입을 축하합니다",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Register.this, Login.class));
-                    }
-                    cursor.close();
+                    startActivity(new Intent(Register.this, Login.class));
                     break;
             }
         }

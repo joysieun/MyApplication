@@ -37,8 +37,8 @@ public class PetResultDB extends SQLiteOpenHelper {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID
                 +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_USER_ID + " VARCHAR(225), " +
-                COLUMN_PASSWORD + " INTEGER, " +
+                COLUMN_USER_ID + " TEXT, " +
+                COLUMN_PASSWORD + " TEXT, " +
                 COLUMN_NAME + " TEXT," +COLUMN_PET_NAME + " TEXT,"+
                 COLUMN_RESULT + " TEXT," + COLUMN_TIME + " TEXT,"+
                 COLUMN_SKIN_IMAGE+" BLOP);";
