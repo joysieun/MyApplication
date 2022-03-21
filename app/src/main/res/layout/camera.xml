@@ -5,64 +5,76 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Camera">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#3F51B5"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
-    <EditText
-        android:layout_gravity="center"
-        android:id="@+id/uname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="사용자 아이디를 쓰시오"/>
-    <EditText
-        android:layout_gravity="center"
-        android:id="@+id/petname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="강아지 이름을 쓰시오"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         />
 
-
-    <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/skin_image"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground"/>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
+            android:layout_marginRight="10dp"
             android:id="@+id/camera"
-            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="사진찍기"/>
+            android:text="카메라"/>
+
         <Button
+
             android:layout_marginLeft="5dp"
             android:id="@+id/select"
-            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="이미지 가져오기"/>
-        <Button
-            android:layout_marginLeft="5dp"
-            android:id="@+id/reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="다시 선택하기"/>
+            android:text="사진이미지"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <Button
-        android:layout_marginTop="20dp"
+
+
+    <ImageView
+        android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:id="@+id/btn_result"
+        android:id="@+id/skin_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground"/>
+
+    <Button
+        android:layout_marginLeft="5dp"
+        android:id="@+id/reset"
+        android:layout_gravity="right"
+        android:layout_marginRight="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="결과보기"/>
+        android:text="다시 선택하기"/>
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/petname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="반려동물 이름"/>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:id="@+id/btn_result"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="진단"/>
 </LinearLayout>

@@ -17,6 +17,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,11 +34,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -61,6 +67,10 @@ public class Camera extends AppCompatActivity {
     EditText edituname;
     String pet;
     String user;
+    Toolbar toolbar;
+
+    private FirebaseAuth firebaseAuth;
+
 
 
     final static int TAKE_PICTURE =1;
@@ -78,7 +88,16 @@ public class Camera extends AppCompatActivity {
         btnreset = findViewById(R.id.reset);
         btnselect = findViewById(R.id.select);
         editpetname = findViewById(R.id.petname);
-        edituname = findViewById(R.id.uname);
+        firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
+        String email = googleuser.getEmail();
+        //툴바 커스텀 한거 넣기
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_home_24);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -108,14 +127,20 @@ public class Camera extends AppCompatActivity {
             public void onClick(View view) {
                 byte[] data = imageViewToByte(imageView);
                 pet = editpetname.getText().toString();
-                user = edituname.getText().toString();
+                user = email;
 
-                Date currentTime = Calendar.getInstance().getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String getTime = dateFormat.format(currentTime);
-                ResultDB petdb = new ResultDB(getApplicationContext(),"Result.db",null,2);
-                petdb.insertdata(user,pet,null,getTime, data);
-                showDialog();
+                if(pet.length() == 0){
+                    Toast.makeText(getApplicationContext(),"반려동물 이름을 작성해주세요",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    Date currentTime = Calendar.getInstance().getTime();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String getTime = dateFormat.format(currentTime);
+                    ResultDB petdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
+                    petdb.insertdata(user, pet, null, getTime, data);
+                    showDialog();
+                }
             }
         });
 
@@ -246,10 +271,12 @@ public class Camera extends AppCompatActivity {
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+    //진단 버튼 누르면 나오는 dialog창
     void showDialog(){
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(Camera.this)
-                .setTitle("Diagnosis has been completed")
-                .setMessage("MyInfo > Mypage : you can show your result!!")
+                .setTitle("진단이 완료되었습니다.")
+                .setMessage("내 정보> 마이페이지 : 결과를 확인하실 수 있습니다.")
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -262,6 +289,28 @@ public class Camera extends AppCompatActivity {
                 });
         AlertDialog alertDialog = msgBuilder.create();
         alertDialog.show();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        switch(menuItem.getItemId()){
+            case android.R.id.home:
+                Intent back = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(back);
+                return true;
+
+            default:
+                ((GoogleLogin)GoogleLogin.mContext).signOut();
+                Intent in = new Intent(getApplicationContext(),GoogleLogin.class);
+                startActivity(in);
+                return true;
+        }
 
     }
 

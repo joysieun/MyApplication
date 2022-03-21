@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -25,8 +28,10 @@ public class FragmentMypage extends Fragment {
     RecyclerView recyclerView;
     private UserAdapter adapter;
     ArrayList<Result> resultList = new ArrayList<>();
-
+    private FirebaseAuth firebaseAuth;
     TextView tv;
+    String[] realuserid;
+    String email;
 
     public FragmentMypage() {
         // Required empty public constructor
@@ -42,7 +47,15 @@ public class FragmentMypage extends Fragment {
         adapter = new UserAdapter();
         recyclerView.setAdapter(adapter);
         getUserList();
-        //tv =rootView.findViewById(R.id.onusername);
+        tv =rootView.findViewById(R.id.onusername);
+        firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
+        email = googleuser.getDisplayName();
+        realuserid = email.split("@");
+
+        tv.setText(realuserid[0]+"님의 진단 기록");
+
+
         return rootView;
 
     }
@@ -71,4 +84,5 @@ public class FragmentMypage extends Fragment {
         Log.d("mypage",msg);
     }
     }
+
 

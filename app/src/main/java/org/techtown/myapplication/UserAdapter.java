@@ -16,6 +16,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
@@ -26,7 +29,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     ResultDB helper;
     ArrayList<Result> info = new ArrayList<Result>();
     AlertDialog.Builder builder;
-
+    Result information;
 
 
     @NonNull
@@ -36,42 +39,42 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View infoView = inflater.inflate(R.layout.user_item, parent,false);
 
-
         return new ViewHolder(infoView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, int position) {
-        Result inforamtion = info.get(position);
-        holder.setInfo(inforamtion);
+    public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, final int position) {
 
-        holder.cardView.setOnClickListener(new View.OnClickListener(){
+        information = info.get(holder.getAdapterPosition());
+        holder.setInfo(information);
 
+
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int pos = holder.getAdapterPosition();
                 Context context = view.getContext();
-
-                helper = new ResultDB(context.getApplicationContext(),"Result.db", null,2);
-
-                //선택한 기록 날짜 담기
-                time = info.get(holder.getAdapterPosition()).getTime();
+                helper = new ResultDB(context.getApplicationContext(),"Results.db",null,2);
+                //클릭한 카드뷰의 시간 정보 담기
+                time = info.get(pos).getTime().toString();
+                //다이얼로그박스 호출
                 builder = new AlertDialog.Builder(context);
-                builder.setTitle("삭제");
-                builder.setMessage("["+time+"]"+"해당 날짜의 결과를 삭제하시겠습니까?");
-                builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
+                builder.setTitle("진단결과 삭제");
+                builder.setMessage("["+time+"]해당 날짜 진단결과를 삭제하시겠습니까?");
+                builder.setPositiveButton("예",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int post = holder.getAdapterPosition();
+                                deleteItem(post);
+                                notifyDataSetChanged();
+                                helper.deletetime(time);
 
-
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        deleteItem(holder.getAdapterPosition());
-                        notifyDataSetChanged();
-
-                        helper.deletetime(time);
-                    }
-
-                });
-                builder.setNegativeButton("아니오",
-                        new DialogInterface.OnClickListener(){
+                            }
+                        });
+                builder.setNegativeButton("아니요",
+                        new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -80,18 +83,27 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         });
                 builder.show();
 
-
             }
         });
 
+
+
+
+
+
     }
+
+
+
 
     @Override
     public int getItemCount() {
         return info.size();
     }
+
     public void addItem(Result pr){
         info.add(pr);
+        notifyDataSetChanged();
     }
 
     public void deleteItem(int position){
@@ -100,9 +112,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public void removeAllItem(){
         info.clear();
+
     }
-
-
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -129,3 +140,4 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     }
 }
+
