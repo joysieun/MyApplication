@@ -137,7 +137,7 @@ public class GoogleLogin extends AppCompatActivity implements GoogleApiClient.On
 
     }
     private void updateUI(FirebaseUser user){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();
     }

@@ -55,7 +55,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view) {
                 int pos = holder.getAdapterPosition();
                 Context context = view.getContext();
-                helper = new ResultDB(context.getApplicationContext(),"Results.db",null,2);
+                helper = new ResultDB(context.getApplicationContext(),"Result.db",null,2);
                 //클릭한 카드뷰의 시간 정보 담기
                 time = info.get(pos).getTime().toString();
                 //다이얼로그박스 호출
@@ -118,21 +118,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder{
 
 
-        private TextView tpetname;
+        private TextView ttype;
         private TextView ttime;
         private ImageView imgskin;
         private CardView cardView;
 
         public ViewHolder(View infoView){
             super(infoView);
-
-            tpetname = infoView.findViewById(R.id.pet_name);
+            ttype = infoView.findViewById(R.id.type);
             ttime = infoView.findViewById(R.id.today_date);
             imgskin = infoView.findViewById(R.id.skin_user);
             cardView = infoView.findViewById(R.id.card);
         }
         public void setInfo(Result pr){
-            tpetname.setText(pr.getPetname());
+            ttype.setText(pr.getCardtype());
             ttime.setText(pr.getTime());
             Bitmap bt = BitmapFactory.decodeByteArray(pr.getPet_image(),0,pr.getPet_image().length);
             imgskin.setImageBitmap(bt);

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center" >
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="강아지 정보 입력"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:textSize="30sp"/>
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:layout_margin="50dp"
+        android:padding="40dp"
+        android:paddingTop="40dp"
+        android:background="@drawable/layout_background">
+        <ImageView
+            android:id="@+id/pet_face"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_baseline_home_24"
+            />
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이름 :"/>
+            <EditText
+                android:id="@+id/dog_name"
+                android:hint="강아지 이름 또는 애칭"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="성별 :"/>
+            <EditText
+                android:hint="남/여"
+                android:id="@+id/dog_sex"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="7dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="나이 :"/>
+            <EditText
+                android:id="@+id/dog_age"
+                android:layout_width="250dp"
+                android:hint="숫자만 적어주세요"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="7dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="생일 :"/>
+            <EditText
+                android:id="@+id/dog_birth"
+                android:layout_width="250dp"
+                android:hint="mm-dd형식으로 ex) 05-04"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_savedoginfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="등록"
+        android:layout_gravity="center"
+        android:background="@drawable/layout_background"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>

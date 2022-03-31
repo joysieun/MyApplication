@@ -17,11 +17,13 @@ public class ResultDB extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "Result_Info";
 
     public static final String COLUMN_ID ="_id";
+
     public static final String COLUMN_USER_ID = "userid";//사용자 아이디
-    public static final String COLUMN_PET_NAME = "petname"; //반려동물 이름
+    public static final String COLUMN_TYPE = "cardtype"; // 메모인지, 피부체크인지, 케어인지
     public static final String COLUMN_SKIN_IMAGE = "skin_image"; //피부이미지
     public static final String COLUMN_RESULT = "p_result"; //진단결과
     public static final String COLUMN_TIME = "ctime"; //날짜
+
     FirebaseAuth firebaseAuth;
     //ResultDB 생성자로 관리할 DB 이름과 버전 정보를 받음
 
@@ -32,7 +34,7 @@ public class ResultDB extends SQLiteOpenHelper {
     //테이블 생성
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_NAME+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, userid TEXT, petname TEXT, p_result TEXT, ctime TEXT, skin_image BLOB );");
+        sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_NAME+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,  userid TEXT, cardtype TEXT, p_result TEXT, ctime TEXT, skin_image BLOB );");
     }
 
     @Override
@@ -40,17 +42,19 @@ public class ResultDB extends SQLiteOpenHelper {
 
     }
 
-    //데이터 등록
-    public boolean insertdata(String userid, String petname, String skinresult, String ctime, byte[] pet_image ){
+    //결과에 대한 데이터 등록
+    public boolean insertdata( String userid,String cardtype, String skinresult, String ctime, byte[] pet_image){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+
         cv.put(COLUMN_USER_ID, userid);
-        cv.put(COLUMN_PET_NAME, petname);
+        cv.put(COLUMN_TYPE, cardtype);
         cv.put(COLUMN_RESULT, skinresult);
         cv.put(COLUMN_TIME, ctime);
         cv.put(COLUMN_SKIN_IMAGE, pet_image);
 
-        long result = db.insert(TABLE_NAME,null,cv);
+
+        long result = db.insert(TABLE_NAME,"",cv);
         if(result == -1){
             return false;
 
@@ -86,7 +90,7 @@ public class ResultDB extends SQLiteOpenHelper {
 
         SQLiteDatabase DB = getReadableDatabase();
         String result = "";
-        Cursor cursor = DB.rawQuery("SELECT userid, petname, p_result, ctime, skin_image FROM Result_Info WHERE userid = '" +email+ "'ORDER BY userid",null);
+        Cursor cursor = DB.rawQuery("SELECT userid, cardtype, p_result, ctime, skin_image FROM Result_Info WHERE userid = '" +email+ "'ORDER BY userid",null);
         return cursor;
     }
 

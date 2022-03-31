@@ -6,18 +6,11 @@
     android:id="@+id/map_layout"
     android:orientation="vertical"
     tools:context=".FragmentHos">
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
+
+    <com.naver.maps.map.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.MapFragemnt"/>
-
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/place_autocomplete_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment">
-    </fragment>
+        android:id="@+id/mapView"/>
 
 
 

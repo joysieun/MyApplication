@@ -17,11 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCDGAEoodaBHNeD9gaqAG9rD9v5SIZHqH4"/>
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="ysj9hrao52"
+            />
 
         <activity
-            android:name=".GoogleLogin"
+            android:name=".Loading"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".GoogleLogin"
+            android:exported="false"
+            android:parentActivityName=".Loading"/>
+        <activity android:name=".DogInfo"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity"
             android:exported="false"
             android:parentActivityName=".GoogleLogin"/>

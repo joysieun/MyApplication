@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_disease"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="search"/>
+    <item
+        android:id="@+id/menu_hospital"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="hospital"
+        />
+    <item
+        android:id="@+id/mypage"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="mypage"/>
+
+</menu>

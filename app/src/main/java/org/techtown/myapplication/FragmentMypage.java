@@ -69,7 +69,7 @@ public class FragmentMypage extends Fragment {
         while(cursor.moveToNext()){
             Result result = new Result();
             result.setUserid(cursor.getString(0));
-            result.setPetname(cursor.getString(1));
+            result.setCardtype(cursor.getString(1));
             result.setSkinresult(cursor.getString(2));
             result.setTime(cursor.getString(3));
             result.setPet_image(cursor.getBlob(4));

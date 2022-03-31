@@ -13,68 +13,101 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
         />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_marginRight="10dp"
-            android:id="@+id/camera"
-            android:textStyle="bold"
-            android:layout_width="120dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="카메라"/>
+            android:text="STEP1) 체크받을 이미지를 선택해주세요."
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:layout_marginRight="10dp"
+                android:id="@+id/camera"
+                android:textStyle="bold"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="카메라"/>
+
+            <Button
+
+                android:layout_marginLeft="5dp"
+                android:id="@+id/select"
+                android:textStyle="bold"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="사진이미지"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:text="STEP2) 선택하신 이미지가 아니면 초기화 버튼을 눌러주세요."/>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/skin_image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_foreground"/>
 
         <Button
 
             android:layout_marginLeft="5dp"
-            android:id="@+id/select"
-            android:textStyle="bold"
-            android:layout_width="120dp"
+            android:id="@+id/reset"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="25dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사진이미지"/>
+            android:text="초기화"/>
+    </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
-    <ImageView
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:id="@+id/skin_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground"/>
-
-    <Button
-        android:layout_marginLeft="5dp"
-        android:id="@+id/reset"
-        android:layout_gravity="right"
-        android:layout_marginRight="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다시 선택하기"/>
-
-    <EditText
+    <TextView
         android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:id="@+id/petname"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="반려동물 이름"/>
-
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:text="STEP3) 시작버튼을 눌러 체크를 받아보세요."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="( 결과는 마이페이지에서 확인가능합니다.)"/>
     <Button
         android:layout_marginTop="30dp"
-        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_gravity="left"
         android:id="@+id/btn_result"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="진단"/>
+        android:text="시작"/>
 </LinearLayout>

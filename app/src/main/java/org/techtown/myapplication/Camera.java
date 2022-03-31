@@ -54,7 +54,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Camera extends AppCompatActivity {
-    final private static String TAG ="GILBOMI";
+
+    final private static String TAG ="see"; //c
     private final int GET_GALLERY_IMAGE =200;
     Button btn;
     Button resultbtn;
@@ -68,6 +69,8 @@ public class Camera extends AppCompatActivity {
     String pet;
     String user;
     Toolbar toolbar;
+    String type;
+
 
     private FirebaseAuth firebaseAuth;
 
@@ -87,7 +90,6 @@ public class Camera extends AppCompatActivity {
         resultbtn = findViewById(R.id.btn_result);
         btnreset = findViewById(R.id.reset);
         btnselect = findViewById(R.id.select);
-        editpetname = findViewById(R.id.petname);
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
         String email = googleuser.getEmail();
@@ -113,7 +115,7 @@ public class Camera extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()) {
+                switch (view.getId()) { //c
                     case R.id.camera:
                         dispatchTackPictureIntent();
                         break;
@@ -126,21 +128,17 @@ public class Camera extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 byte[] data = imageViewToByte(imageView);
-                pet = editpetname.getText().toString();
                 user = email;
 
-                if(pet.length() == 0){
-                    Toast.makeText(getApplicationContext(),"반려동물 이름을 작성해주세요",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else {
-                    Date currentTime = Calendar.getInstance().getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    String getTime = dateFormat.format(currentTime);
-                    ResultDB petdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
-                    petdb.insertdata(user, pet, null, getTime, data);
-                    showDialog();
-                }
+
+                type = "check";
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String getTime = dateFormat.format(currentTime);
+                ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
+                resultdb.insertdata(user, type,  null, getTime, data);
+                showDialog();
+
             }
         });
 
@@ -158,7 +156,7 @@ public class Camera extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setType("image/*");
+                intent.setType("image/*"); //c
                 intent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
