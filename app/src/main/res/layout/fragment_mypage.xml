@@ -19,6 +19,24 @@
 
         android:layout_width="match_parent"
         android:id="@+id/recycleview"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/pluscare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 케어"/>
+        <Button
+            android:id="@+id/plusmemo"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 메모"/>
+    </LinearLayout>
 
 </LinearLayout>

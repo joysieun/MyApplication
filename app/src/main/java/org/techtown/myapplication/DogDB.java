@@ -63,4 +63,8 @@ public class DogDB extends SQLiteOpenHelper {
         }
 
     }
+    public void deletedata(String userid ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM User_dog WHERE userid='" + userid + "'; ");
+    }
 }

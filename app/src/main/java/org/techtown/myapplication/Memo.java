@@ -1,13 +1,11 @@
 package org.techtown.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,44 +26,39 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DogInfo extends AppCompatActivity {
+public class Memo extends AppCompatActivity {
 
     private final int GET_GALLERY_IMAGE =200;
-    EditText dog_name;
-    EditText dog_sex;
-    EditText dog_age;
-    EditText dog_birth;
-    ImageView pet_face;
-    Button btn_savedoginfo;
+    EditText memotitle;
+    EditText memocontent;
+    ImageView img_memo;
+    Button memobutton;
+    Button memosuspend;
     FirebaseAuth firebaseAuth;
-    String dname;
-    String dage;
-    String dsex;
-    byte[] data;
-    String dbirth;
-    ImageView dface;
-
     String email;
-    DogDB dogDB;
+
+    String user;
+    String title;
+    String content;
+    String type;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dog_info);
+        setContentView(R.layout.memo_activity);
 
-        dog_name = (EditText) findViewById(R.id.dog_name);
-        dog_sex = (EditText) findViewById(R.id.dog_sex);
-        dog_age = (EditText) findViewById(R.id.dog_age);
-        dog_birth = (EditText) findViewById(R.id.dog_birth);
-        btn_savedoginfo = (Button) findViewById(R.id.btn_savedoginfo);
-        pet_face = findViewById(R.id.pet_face);
+        memotitle = (EditText) findViewById(R.id.memotitle);
+        memocontent = (EditText) findViewById(R.id.memocontent);
+        img_memo = (ImageView) findViewById(R.id.imgmemo);
+        memobutton = (Button) findViewById(R.id.btn_memo);
+        memosuspend = (Button)findViewById(R.id.btn_suspend);
 
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
         email = googleuser.getEmail();
 
-        pet_face.setOnClickListener(new View.OnClickListener() {
+        img_memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -76,36 +69,39 @@ public class DogInfo extends AppCompatActivity {
             }
         });
 
-
-
-
-        btn_savedoginfo.setOnClickListener(new View.OnClickListener(){
-
+        memobutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data = imageViewToByte(pet_face);
-                dname = dog_name.getText().toString();
-                dsex = dog_sex.getText().toString();
-                dage = dog_age.getText().toString();
-                dbirth = dog_birth.getText().toString();
-                //여기에 이미지 안들어갔을때오류 발생하는거 고쳐야 됨!!!!
-                if(dname.length() == 0 || dsex.length() == 0 || dage.length() == 0 || dbirth.length() == 0){
-                    Toast.makeText(DogInfo.this, "작성을 완성해주세요",Toast.LENGTH_SHORT).show();
+                byte[] data = imageViewToByte(img_memo);
+                user = email;
+                type = "memo";
+                title = memotitle.getText().toString();
+                if(title.length() != 0){
+                    Date currentTime = Calendar.getInstance().getTime();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String getTime = dateFormat.format(currentTime);
+                    ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
+                    resultdb.insertdata(user, type,  title, getTime, data);
+                    Intent i = new Intent(Memo.this, MainActivity.class);
+                    startActivity(i);
+
                 }
                 else{
-                    dogDB = new DogDB(getApplicationContext(), "Dog.db", null, 2);
-                    dogDB.insertdogdata(email, dname, dage, dsex, dbirth,data);
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
+                    Toast.makeText(Memo.this, "작성을 완성해주세요",Toast.LENGTH_SHORT).show();
                 }
 
+            }});
 
+        memosuspend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Memo.this, MainActivity.class);
+                startActivity(i);
             }
         });
-
-
     }
 
+   
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -114,7 +110,7 @@ public class DogInfo extends AppCompatActivity {
                 case GET_GALLERY_IMAGE:
                     if(requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data!=null && data.getData() !=null){
                         Uri selectedImageUri = data.getData();
-                        Glide.with(this).load(selectedImageUri).into(pet_face);
+                        Glide.with(this).load(selectedImageUri).into(img_memo);
 
                     }
             }

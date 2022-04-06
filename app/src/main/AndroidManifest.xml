@@ -43,10 +43,13 @@
         <activity android:name=".Camera"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
-
-        <activity android:name=".AboutInfo"
+        <activity android:name=".Memo"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Care"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+
         <provider android:name="androidx.core.content.FileProvider" android:authorities="org.techtown.myapplication.fileprovider" android:exported="false" android:grantUriPermissions="true"> <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" /> </provider>
 
 

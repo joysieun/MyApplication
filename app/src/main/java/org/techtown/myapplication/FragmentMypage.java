@@ -1,5 +1,6 @@
 package org.techtown.myapplication;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ public class FragmentMypage extends Fragment {
     TextView tv;
     String[] realuserid;
     String email;
+    Button plusmemo;
+    Button pluscare;
 
     public FragmentMypage() {
         // Required empty public constructor
@@ -43,6 +47,27 @@ public class FragmentMypage extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
         recyclerView = rootView.findViewById(R.id.recycleview);
+        pluscare = rootView.findViewById(R.id.pluscare);
+        plusmemo = rootView.findViewById(R.id.plusmemo);
+        pluscare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Care.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+
+            }
+        });
+
+        plusmemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Memo.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
+        
         recyclerView.setLayoutManager(layoutManager);
         adapter = new UserAdapter();
         recyclerView.setAdapter(adapter);
@@ -53,7 +78,7 @@ public class FragmentMypage extends Fragment {
         email = googleuser.getDisplayName();
         realuserid = email.split("@");
 
-        tv.setText(realuserid[0]+"님의 진단 기록");
+        tv.setText("health care 일지");
 
 
         return rootView;

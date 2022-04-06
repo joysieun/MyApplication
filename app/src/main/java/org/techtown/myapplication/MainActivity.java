@@ -1,87 +1,143 @@
 package org.techtown.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.GoogleMap;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.util.FusedLocationSource;
 
-public class MainActivity extends AppCompatActivity {
+import org.w3c.dom.Text;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
 
-    Button btn_diagnose;
-    Button btn_info;
-    Button btn_doginfo;
+public class MainActivity extends AppCompatActivity  {
+
+    FragmentInfo fragmentInfo;
+    FragmentHos fragmentHos;
+    FragmentMypage fragmentMypage;
+    FragmentHome fragmentHome;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
     Toolbar toolbar;
-    String email;
     DogDB dogDB;
-    SQLiteDatabase DB;
     FirebaseAuth firebaseAuth;
+    String email;
+    SQLiteDatabase DB;
+    ImageView infopage_img;
+    TextView tv_petname, tv_petsex,tv_petage,tv_petbirth,tv_owner;
+    String name;
+    Button btn_doginfo;
+    Button btn_modify;
+
+    TextView textView;
+    SQLiteDatabase database;
+
+
+
+    private NaverMap naverMap;
+    private FusedLocationSource locationSource;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE =1000;
+    private static final String[] PERMISSIONS={
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        try {
+            // 1번 isCheckDB 함수 : DB가 있는지 확인
+            boolean bResult = isCheckDB();	// DB가 있는지?
+            Log.d("MiniApp", "DB Check="+bResult);
+            if(!bResult){	// DB가 없으면 복사
+                // 2번 copyDB 함수 : DB를 local에서 device로 복사
+                copyDB(this);
+            }else{
+
+            }
+        } catch (Exception e) {
+        }
+        //db 조회
+        String databaseName = "hospital.db";
+        createDatabase(databaseName);
+
+
+
+
+
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_home_24);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
-        email = googleuser.getEmail();
+        infopage_img = findViewById(R.id.infopage_img);
+        tv_petage = findViewById(R.id.tv_petage);
+        tv_petbirth=findViewById(R.id.tv_petbirth);
+        tv_petname = findViewById(R.id.tv_petname);
+        tv_petsex = findViewById(R.id.tv_petsex);
+        tv_owner = findViewById(R.id.tv_owner);
+        btn_doginfo = findViewById(R.id.btn_doginfo2);
+        btn_modify = findViewById(R.id.btn_modify);
 
 
-        dogDB = new DogDB(MainActivity.this,"Dog.db",null,2);
-        DB = dogDB.getReadableDatabase();
-        Cursor cursor = DB.rawQuery("SELECT userid FROM User_dog WHERE  userid = '" +email+ "'ORDER BY userid",null);
+        fragmentInfo = new FragmentInfo();
+        fragmentHos = new FragmentHos();
+        fragmentMypage = new FragmentMypage();
+        fragmentHome = new FragmentHome();
 
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.containers,fragmentHome).commit();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_menu_navi);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
-
-        btn_diagnose = findViewById(R.id.btn_diagnose);
-        btn_diagnose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Camera.class);
-                startActivity(intent); //액티비티띄우기
-            }
-        });
-        btn_info = findViewById(R.id.btn_info);
-        btn_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AboutInfo.class);
-                startActivity(intent);
-            }
-        });
-
-        btn_doginfo = findViewById(R.id.btn_doginfo);
         btn_doginfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(cursor.getCount() != 0 ){
+                DB = dogDB.getReadableDatabase();
+                Cursor c = DB.rawQuery("SELECT petname, petage, petsex, petbirth, petface FROM User_dog WHERE  userid = '" +email+ "'ORDER BY userid",null);
+
+                if(c.getCount() != 0 ){
                     Toast.makeText(MainActivity.this, "이미등록",Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -90,6 +146,56 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
+        email = googleuser.getEmail();
+        firebaseAuth = FirebaseAuth.getInstance();
+        name = googleuser.getDisplayName();
+        dogDB = new DogDB(MainActivity.this,"Dog.db",null,2);
+        Dog dog = new Dog();
+        settingdoginfo(dog);
+
+
+
+    }
+    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            switch(item.getItemId()){
+                case R.id.menu_home:
+                    transaction.replace(R.id.containers,fragmentHome).commitAllowingStateLoss();
+                    break;
+
+                case R.id.menu_disease:
+                    transaction.replace(R.id.containers,fragmentInfo).commitAllowingStateLoss();
+                    break;
+
+
+                case R.id.menu_hospital:
+                    transaction.replace(R.id.containers,fragmentHos).commitAllowingStateLoss();
+                    break;
+
+
+                case R.id.mypage:
+                    DB = dogDB.getReadableDatabase();
+                    Cursor d = DB.rawQuery("SELECT petname, petage, petsex, petbirth, petface FROM User_dog WHERE  userid = '" +email+ "'ORDER BY userid",null);
+
+                    if(d.getCount() == 0 ){
+                        Toast.makeText(MainActivity.this, "강아지정보부터 등록하시오",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        transaction.replace(R.id.containers,fragmentMypage).commitAllowingStateLoss();
+                        break;
+                    }
+
+            }
+            return true;
+        }
     }
 
     @Override
@@ -105,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(back);
                 return true;
 
-
             default:
                 ((GoogleLogin)GoogleLogin.mContext).signOut();
                 Intent in = new Intent(getApplicationContext(),GoogleLogin.class);
@@ -114,5 +219,118 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    public boolean settingdoginfo(Dog dog){
+
+        DB = dogDB.getReadableDatabase();
+        Cursor cursor = DB.rawQuery("SELECT petname, petage, petsex, petbirth, petface FROM User_dog WHERE  userid = '" +email+ "'ORDER BY userid",null);
+        if(cursor.getCount() == 0){
+            Toast.makeText(MainActivity.this,"등록부탁",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else {
+            cursor.moveToFirst();
+            dog.setPetname(cursor.getString(0));
+            dog.setPetage(cursor.getString(1));
+            dog.setPetsex(cursor.getString(2));
+            dog.setPetbirth(cursor.getString(3));
+            dog.setPetface(cursor.getBlob(4));
+            tv_petname.setText(dog.getPetname());
+            tv_petage.setText(dog.getPetage() + "살");
+            tv_petsex.setText(dog.getPetsex());
+            tv_petbirth.setText(dog.getPetbirth().split("-")[0] + "월" + dog.getPetbirth().split("-")[1] + "일");
+            tv_owner.setText(name);
+            Bitmap bt = BitmapFactory.decodeByteArray(dog.getPetface(), 0, dog.getPetface().length);
+            infopage_img.setImageBitmap(bt);
+            return true;
+        }
+    }
+
+    //db 있는지 확인
+    public boolean isCheckDB(){
+        String filePath = "/data/data/org.techtown.myapplication/databases/hospital.db";
+        File file = new File(filePath);
+        if (file.exists()) {
+
+            return true;
+        }
+        return false;
+    }
+    public void copyDB(Context mContext){
+        Log.d("MiniApp", "copyDB");
+        AssetManager manager = mContext.getAssets();
+        String folderPath = "/data/data/org.techtown.myapplication/databases";
+        String filePath = "/data/data/org.techtown.myapplication/databases/hospital.db";
+        File folder = new File(folderPath);
+        File file = new File(filePath);
+
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+        try {
+
+            InputStream is = manager.open("db/hospital.db");
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            if (folder.exists()) {
+
+            }else{
+
+                folder.mkdirs();
+            }
+
+            if (file.exists()) {
+
+                file.delete();
+                file.createNewFile();
+            }
+
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            int read = -1;
+            byte[] buffer = new byte[1024];
+            while ((read = bis.read(buffer, 0, 1024)) != -1) {
+                bos.write(buffer, 0, read);
+            }
+
+            bos.flush();
+
+            bos.close();
+            fos.close();
+            bis.close();
+            is.close();
+
+        } catch (IOException e) {
+            Log.e("ErrorMessage : ", e.getMessage());
+        }
+    }
+
+    private void createDatabase(String name) {
+        database = openOrCreateDatabase(name, MODE_PRIVATE, null);
+    }
+
+
+    public void executeQuery() {
+
+        // 본인의 columns name and table name
+        Cursor cursor = database.rawQuery("select name,tel, onoff,place1,Latitude,Longitude from Hospital", null);
+        int recordCount = cursor.getCount();
+
+
+//        for (int i = 0; i < recordCount; i++) {
+        // 10개 레코드만 출력해보기
+        for (int i = 0; i < 10; i++) {
+            cursor.moveToNext();
+
+            // 본인의 데이터 타입이 string 인지 int인지에 맞게
+            String bank = cursor.getString(0);
+            String brunch_nm = cursor.getString(1);
+            String brunch_ad = cursor.getString(2);
+//            int age = cursor.getInt(3); // int 예시
+
+        }
+        cursor.close();
+    }
+
+
+
 
 }

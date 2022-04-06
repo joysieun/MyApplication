@@ -7,11 +7,16 @@
     android:orientation="vertical"
     tools:context=".FragmentHos">
 
-    <com.naver.maps.map.MapView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleview2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mapView"/>
+        android:layout_height="260dp"
+        android:layout_weight="1" />
 
+    <com.naver.maps.map.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="260dp" />
 
 
 </LinearLayout>

@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
@@ -50,6 +52,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
 
+
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +65,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 //다이얼로그박스 호출
                 builder = new AlertDialog.Builder(context);
                 builder.setTitle("진단결과 삭제");
-                builder.setMessage("["+time+"]해당 날짜 진단결과를 삭제하시겠습니까?");
+                //이런식으로 나중에 클릭하면 크게 보기 하자.
+                builder.setMessage(info.get(pos).getSkinresult());
                 builder.setPositiveButton("예",
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -122,6 +127,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private TextView ttime;
         private ImageView imgskin;
         private CardView cardView;
+        private TextView ttile;
 
         public ViewHolder(View infoView){
             super(infoView);
@@ -129,12 +135,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             ttime = infoView.findViewById(R.id.today_date);
             imgskin = infoView.findViewById(R.id.skin_user);
             cardView = infoView.findViewById(R.id.card);
+            ttile = infoView.findViewById(R.id.pet_result);
         }
         public void setInfo(Result pr){
             ttype.setText(pr.getCardtype());
             ttime.setText(pr.getTime());
             Bitmap bt = BitmapFactory.decodeByteArray(pr.getPet_image(),0,pr.getPet_image().length);
             imgskin.setImageBitmap(bt);
+            ttile.setText(pr.getSkinresult());
         }
 
     }

@@ -15,8 +15,9 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="10dp">
         <LinearLayout
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_marginTop="5dp"
@@ -28,31 +29,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="check"
+                    android:textColor="@color/black"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"/>
                 <TextView
                     android:gravity="right"
-                    android:layout_marginRight="50dp"
                     android:textSize="16sp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/today_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="일요일"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/skin_user"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:src="@mipmap/ic_launcher"/>
 
 
@@ -63,28 +66,17 @@
                     android:id="@+id/pet_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="모낭염으로 의심됩니다."/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/btn_more"
-                    android:layout_marginRight="80dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="more"/>
                 <Button
                     android:id="@+id/btn_delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="delete"/>
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_gravity="center"
+                    android:layout_height="70dp"
+                    android:text="삭"/>
             </LinearLayout>
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

@@ -8,17 +8,26 @@
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/drawable/layout_background.xml" value="0.1" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_loading.xml" value="0.1" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_loding.xml" value="0.2006340579710145" />
-        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/add_care.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/add_memo.xml" value="0.1543859649122807" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/camera.xml" value="0.264" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/camera_dn.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/care_activity.xml" value="0.25181159420289856" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dog_info.xml" value="0.2" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_care.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_home.xml" value="0.12310030395136778" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_hos.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_info.xml" value="0.13333333333333333" />
-        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_mypage.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_memo.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fragment_mypage.xml" value="0.264" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/hos_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/image_add.xml" value="0.1" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/info_about.xml" value="0.264" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/login_google.xml" value="0.152" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/login_page.xml" value="0.136" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/memo_activity.xml" value="0.25181159420289856" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/modify_doginfo.xml" value="0.10572916666666667" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/register.xml" value="0.1" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/user_item.xml" value="0.4" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/menu/bottom_menu.xml" value="0.253125" />

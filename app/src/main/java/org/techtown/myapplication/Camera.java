@@ -129,8 +129,6 @@ public class Camera extends AppCompatActivity {
             public void onClick(View view) {
                 byte[] data = imageViewToByte(imageView);
                 user = email;
-
-
                 type = "check";
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -138,8 +136,7 @@ public class Camera extends AppCompatActivity {
                 ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
                 resultdb.insertdata(user, type,  null, getTime, data);
                 showDialog();
-
-            }
+                }
         });
 
         btnreset.setOnClickListener(new View.OnClickListener(){

@@ -1,10 +1,6 @@
 package org.techtown.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,44 +24,41 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DogInfo extends AppCompatActivity {
-
+public class Care extends AppCompatActivity {
     private final int GET_GALLERY_IMAGE =200;
-    EditText dog_name;
-    EditText dog_sex;
-    EditText dog_age;
-    EditText dog_birth;
-    ImageView pet_face;
-    Button btn_savedoginfo;
+    EditText carehospital;
+    EditText carecontent;
+    ImageView img_care;
+    Button carebutton;
+    Button caresuspend;
     FirebaseAuth firebaseAuth;
-    String dname;
-    String dage;
-    String dsex;
-    byte[] data;
-    String dbirth;
-    ImageView dface;
-
     String email;
-    DogDB dogDB;
+
+    String user;
+    String title;
+    String content;
+    String type;
+    String carecontext;
+    String caretitle;
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dog_info);
+        setContentView(R.layout.care_activity);
 
-        dog_name = (EditText) findViewById(R.id.dog_name);
-        dog_sex = (EditText) findViewById(R.id.dog_sex);
-        dog_age = (EditText) findViewById(R.id.dog_age);
-        dog_birth = (EditText) findViewById(R.id.dog_birth);
-        btn_savedoginfo = (Button) findViewById(R.id.btn_savedoginfo);
-        pet_face = findViewById(R.id.pet_face);
+        carehospital = (EditText) findViewById(R.id.carehospital);
+        carecontent = (EditText) findViewById(R.id.carecontent);
+        img_care = (ImageView) findViewById(R.id.imgcare);
+        carebutton = (Button) findViewById(R.id.btn_care);
+        caresuspend = (Button)findViewById(R.id.btn_suspend2);
 
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
         email = googleuser.getEmail();
 
-        pet_face.setOnClickListener(new View.OnClickListener() {
+        img_care.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -76,35 +69,38 @@ public class DogInfo extends AppCompatActivity {
             }
         });
 
-
-
-
-        btn_savedoginfo.setOnClickListener(new View.OnClickListener(){
-
+        carebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data = imageViewToByte(pet_face);
-                dname = dog_name.getText().toString();
-                dsex = dog_sex.getText().toString();
-                dage = dog_age.getText().toString();
-                dbirth = dog_birth.getText().toString();
-                //여기에 이미지 안들어갔을때오류 발생하는거 고쳐야 됨!!!!
-                if(dname.length() == 0 || dsex.length() == 0 || dage.length() == 0 || dbirth.length() == 0){
-                    Toast.makeText(DogInfo.this, "작성을 완성해주세요",Toast.LENGTH_SHORT).show();
+                byte[] data = imageViewToByte(img_care);
+                user = email;
+                type = "care";
+                carecontext = carehospital.getText().toString();
+                caretitle = carehospital.getText().toString();
+
+                if(carecontext.length() == 0 || caretitle.length() == 0){
+                    Toast.makeText(Care.this, "작성을 완성해주세요",Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    dogDB = new DogDB(getApplicationContext(), "Dog.db", null, 2);
-                    dogDB.insertdogdata(email, dname, dage, dsex, dbirth,data);
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                else {
+                    Date currentTime = Calendar.getInstance().getTime();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String getTime = dateFormat.format(currentTime);
+                    ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
+                    resultdb.insertdata(user, type, caretitle, getTime, data);
+                    Intent i = new Intent(Care.this, MainActivity.class);
                     startActivity(i);
                 }
+            }});
 
-
+        caresuspend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Care.this, MainActivity.class);
+                startActivity(i);
             }
         });
-
-
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -114,7 +110,7 @@ public class DogInfo extends AppCompatActivity {
                 case GET_GALLERY_IMAGE:
                     if(requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data!=null && data.getData() !=null){
                         Uri selectedImageUri = data.getData();
-                        Glide.with(this).load(selectedImageUri).into(pet_face);
+                        Glide.with(this).load(selectedImageUri).into(img_care);
 
                     }
             }
@@ -130,3 +126,5 @@ public class DogInfo extends AppCompatActivity {
         return byteArray;
     }
 }
+
+
