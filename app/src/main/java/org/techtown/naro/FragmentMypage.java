@@ -1,4 +1,4 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,14 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

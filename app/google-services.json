@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:454961469830:android:ab23fbc59296f555ff7407",
         "android_client_info": {
-          "package_name": "org.techtown.myapplication"
+          "package_name": "org.techtown.naro"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "454961469830-5jj9clkgu7092vqurreslhjp5632qg49.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.techtown.myapplication",
+            "package_name": "org.techtown.naro",
             "certificate_hash": "1cddbffd5ffd31f06f2e56811b8607724f78024c"
           }
         },

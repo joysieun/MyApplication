@@ -1,4 +1,4 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 
 import org.junit.Test;
 

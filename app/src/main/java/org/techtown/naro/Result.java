@@ -1,6 +1,4 @@
-package org.techtown.myapplication;
-
-import android.graphics.Bitmap;
+package org.techtown.naro;
 
 //고객 클래스(결과에 대한)
 public class Result {

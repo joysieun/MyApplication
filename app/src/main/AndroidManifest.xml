@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.techtown.myapplication">
+    package="org.techtown.naro">
     <uses-feature android:name="android.hardware.camera"
         android:required="true"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-feature android:name ="android.hardware.camera" android:required="true"/>
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +23,7 @@
             />
 
         <activity
-            android:name=".Loading"
+            android:name="org.techtown.naro.Loading"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,27 +31,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GoogleLogin"
+        <activity android:name="org.techtown.naro.GoogleLogin"
             android:exported="false"
-            android:parentActivityName=".Loading"/>
-        <activity android:name=".DogInfo"
+            android:parentActivityName="org.techtown.naro.Loading"/>
+        <activity android:name="org.techtown.naro.DogInfo"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".MainActivity"
+            android:parentActivityName="org.techtown.naro.MainActivity"/>
+        <activity android:name="org.techtown.naro.MainActivity"
             android:exported="false"
-            android:parentActivityName=".GoogleLogin"/>
+            android:parentActivityName="org.techtown.naro.GoogleLogin"/>
 
-        <activity android:name=".Camera"
+        <activity android:name="org.techtown.naro.Camera"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".Memo"
+            android:parentActivityName="org.techtown.naro.MainActivity"/>
+        <activity android:name="org.techtown.naro.Memo"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".Care"
+            android:parentActivityName="org.techtown.naro.MainActivity"/>
+        <activity android:name="org.techtown.naro.Care"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="org.techtown.naro.MainActivity"/>
 
-        <provider android:name="androidx.core.content.FileProvider" android:authorities="org.techtown.myapplication.fileprovider" android:exported="false" android:grantUriPermissions="true"> <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" /> </provider>
+
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="org.techtown.naro.fileprovider" android:exported="false" android:grantUriPermissions="true"> <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" /> </provider>
 
 
     </application>

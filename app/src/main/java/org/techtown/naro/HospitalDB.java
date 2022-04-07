@@ -1,12 +1,9 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
 
 public class HospitalDB extends SQLiteOpenHelper {
 

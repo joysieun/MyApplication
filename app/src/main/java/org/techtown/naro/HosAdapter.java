@@ -1,4 +1,4 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

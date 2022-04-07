@@ -1,4 +1,4 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,13 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

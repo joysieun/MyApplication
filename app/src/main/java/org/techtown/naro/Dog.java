@@ -1,4 +1,4 @@
-package org.techtown.myapplication;
+package org.techtown.naro;
 //강아지 정보 저장하는 클래스(사용자마다)
 public class Dog{
     private String userid;
