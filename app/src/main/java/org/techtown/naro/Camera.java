@@ -239,7 +239,10 @@ public class Camera extends AppCompatActivity {
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); //외부저장소의 최상위 경로로 반환
+        File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory() +"/imagecut/");
+        if(!storageDir.exists()){
+            storageDir.mkdirs();
+        }
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
@@ -262,7 +265,7 @@ public class Camera extends AppCompatActivity {
                 e.printStackTrace();
             }
             if(photoFile != null){
-                photoURI = FileProvider.getUriForFile(this,"org.techtown.myapplication.fileprovider", photoFile);
+                photoURI = FileProvider.getUriForFile(this,"org.techtown.naro.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
                 startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
             }
@@ -334,15 +337,17 @@ public class Camera extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            File folder = new File(mCurrentPhotoPath);
+            File folder = new File(Environment.getExternalStorageDirectory() +"/imagecrop/");
             File tempFile = new File(folder.toString(), croppedFileName.getName());
-            photoURI = FileProvider.getUriForFile(Camera.this,"org.techtown.myapplication.fileprovider"
+            photoURI = FileProvider.getUriForFile(Camera.this,"org.techtown.naro.fileprovider"
                     , tempFile);
             i.putExtra("return-data", false);
             i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             i.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 
             Intent intent = new Intent(i);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             ResolveInfo res = list.get(0);
             grantUriPermission(res.activityInfo.packageName, photoURI, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
