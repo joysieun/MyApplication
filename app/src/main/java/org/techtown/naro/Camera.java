@@ -58,7 +58,7 @@ public class Camera extends AppCompatActivity {
             Manifest.permission.CAMERA};
     //권한 동의 여부 질문 후 콜백함수에 쓰일 함수
     private static final int MULTIPLE_PERMISSIONS = 101;
-
+    String a;
     Button btn;
     Button resultbtn;
     ImageView imageView;
