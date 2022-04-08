@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.media.MediaScannerConnection;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -34,6 +36,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +44,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +63,7 @@ public class Camera extends AppCompatActivity {
             Manifest.permission.CAMERA};
     //권한 동의 여부 질문 후 콜백함수에 쓰일 함수
     private static final int MULTIPLE_PERMISSIONS = 101;
-    String a;
+
     Button btn;
     Button resultbtn;
     ImageView imageView;
@@ -173,65 +178,58 @@ public class Camera extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            switch (requestCode) {
-                case PICK_FROM_ALBUM: {
-                    if (data == null) {
-                        return;
-                    }
-                    photoURI = data.getData();
-                    cropImage();
-                    break;
-                }
+        if(resultCode != RESULT_OK){
+            Toast.makeText(getApplication(),"다시 시도해주세요.",Toast.LENGTH_SHORT).show();
+            return;
 
-                case PICK_FROM_CAMERA: {
-                    cropImage();
-                    MediaScannerConnection.scanFile(Camera.this,
-                            new String[]{photoURI.getPath()}, null,
-                            new MediaScannerConnection.OnScanCompletedListener() {
-                                @Override
-                                public void onScanCompleted(String s, Uri uri) {
-
-                                }
-                            });
-                }
-
-                case CROP_PICTURE: {
-                    if(Build.VERSION.SDK_INT >= 29) {
-                        ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), photoURI);
-                        try {
-                            Bitmap bitmap = ImageDecoder.decodeBitmap(source);
-                            if (bitmap != null) {
-                                //이미지 클경우 압축
-                                imageView.setImageBitmap(bitmap);
-                            }
-
-
-                        } catch (Exception e) {
-                            Log.e("error", e.getMessage().toString());
-                        }
-                    }else {
-                        try {
-                            Bitmap bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
-                            if (bitmap2 != null) {
-                                imageView.setImageBitmap(bitmap2);
-                            }
-
-
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                    break;
-
-                }
+        }
+        if(requestCode == PICK_FROM_ALBUM){
+            if(data ==null){
+                return;
             }
-        }catch (Exception E){
+            photoURI = data.getData();
+            cropImage();
+        }
+        else if (requestCode == PICK_FROM_CAMERA){
+            cropImage();
+            MediaScannerConnection.scanFile(Camera.this,
+                    new String[]{photoURI.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String s, Uri uri) {
 
+                        }
+                    });
+        }else if (requestCode == CROP_PICTURE){
+            try{
+                Bitmap bitmap;
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+
+                    Uri cropuri = data.getData();
+
+
+                    ImageDecoder.Source source = ImageDecoder.createSource(Camera.this.getContentResolver(),photoURI);
+                    bitmap = ImageDecoder.decodeBitmap(source);
+                    Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap,128,128);
+                    imageView.setImageBitmap(thumb);
+                    Toast.makeText(this, "이미지 추가", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    Toast.makeText(this, "이미지 처리", Toast.LENGTH_SHORT).show();
+                    bitmap = MediaStore.Images.Media.getBitmap(Camera.this.getContentResolver(), photoURI);
+                    Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
+                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                    thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs);
+                    imageView.setImageBitmap(thumbImage);
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -239,7 +237,7 @@ public class Camera extends AppCompatActivity {
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory() +"/imagecut/");
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if(!storageDir.exists()){
             storageDir.mkdirs();
         }
@@ -251,7 +249,8 @@ public class Camera extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath(); //언제 사용하는지 보기
         return image;
     }
-    //카메라 인텐트
+
+    //카메라촬영 호출 메소드
     private void dispatchTackPictureIntent(){
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//사진찍기 위한 설정
@@ -273,12 +272,82 @@ public class Camera extends AppCompatActivity {
 
 
     }
-    public static byte[] imageViewToByte(ImageView image){
-        Bitmap bitmap = ((GlideBitmapDrawable)image.getDrawable().getCurrent()).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
+
+
+    public void cropImage(){
+
+        this.grantUriPermission("com.android.camera",photoURI,Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //원본
+        Intent i = new Intent("com.android.camera.action.CROP");
+        i.setDataAndType(photoURI,"image/*");
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(i,0);
+        grantUriPermission(list.get(0).activityInfo.packageName,photoURI,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        int size = list.size();
+
+        if(size == 0){
+            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }else {
+            Toast.makeText(this, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show();
+
+            i.putExtra("outputX", 200);
+            i.putExtra("outputY", 200);
+            i.putExtra("aspectX", 1);
+            i.putExtra("aspectY", 1);
+            i.putExtra("scale", true);
+            i.putExtra("crop", true);
+            startActivityForResult(i, CROP_PICTURE);
+
+            File croppedFileName = null;
+            try {
+                croppedFileName = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            File folder = new File(Environment.DIRECTORY_PICTURES);
+            File tempFile = new File(folder.toString(), croppedFileName.getName());
+            photoURI = FileProvider.getUriForFile(Camera.this, "org.techtown.naro", tempFile);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            i.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); //Bitmap 형태로 받기 위해 해당 작업 진행
+
+            startActivityForResult(i, CROP_PICTURE);
+        }
+
+
+    }
+
+
+
+
+
+
+
+    //toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        switch(menuItem.getItemId()){
+            case android.R.id.home:
+                Intent back = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(back);
+                return true;
+
+            default:
+                ((GoogleLogin)GoogleLogin.mContext).signOut();
+                Intent in = new Intent(getApplicationContext(),GoogleLogin.class);
+                startActivity(in);
+                return true;
+        }
+
     }
 
     private Uri getImageUri(Context context, Bitmap inImage) {
@@ -307,77 +376,14 @@ public class Camera extends AppCompatActivity {
         alertDialog.show();
 
     }
-
-
-
-    public void cropImage(){
-        this.grantUriPermission("com.android.camera",photoURI,Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        Intent i = new Intent("com.android.camera.action.CROP");
-        i.setDataAndType(photoURI,"image/*");
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(i,0);
-        grantUriPermission(list.get(0).activityInfo.packageName,photoURI,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        int size = list.size();
-        if(size == 0){
-            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
-            return;
-        }else{
-            Toast.makeText(this, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show();
-            i.putExtra("crop", "true");
-            i.putExtra("aspectX", 1);
-            i.putExtra("aspectY", 1);
-            i.putExtra("scale", true);
-
-            File croppedFileName = null;
-            try {
-                croppedFileName = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            File folder = new File(Environment.getExternalStorageDirectory() +"/imagecrop/");
-            File tempFile = new File(folder.toString(), croppedFileName.getName());
-            photoURI = FileProvider.getUriForFile(Camera.this,"org.techtown.naro.fileprovider"
-                    , tempFile);
-            i.putExtra("return-data", false);
-            i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            i.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-
-            Intent intent = new Intent(i);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            ResolveInfo res = list.get(0);
-            grantUriPermission(res.activityInfo.packageName, photoURI, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            startActivityForResult(intent, CROP_PICTURE);
-
-        }
+    //데베에 저장할 때 byte로 저장하기 위한 메소드
+    public static byte[] imageViewToByte(ImageView image){
+        Bitmap bitmap = ((GlideBitmapDrawable)image.getDrawable().getCurrent()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.toolbar_menu,menu);
-        return true;
-    }
-    public boolean onOptionsItemSelected(MenuItem menuItem){
-        switch(menuItem.getItemId()){
-            case android.R.id.home:
-                Intent back = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(back);
-                return true;
-
-            default:
-                ((GoogleLogin)GoogleLogin.mContext).signOut();
-                Intent in = new Intent(getApplicationContext(),GoogleLogin.class);
-                startActivity(in);
-                return true;
-        }
-
-    }
-
 
 
 

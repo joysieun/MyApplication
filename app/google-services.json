@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "454961469830",
-    "project_id": "loginproject-e69c2",
-    "storage_bucket": "loginproject-e69c2.appspot.com"
+    "project_number": "664207545845",
+    "project_id": "naro-26426",
+    "storage_bucket": "naro-26426.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:454961469830:android:ab23fbc59296f555ff7407",
+        "mobilesdk_app_id": "1:664207545845:android:6b8c553531491ec9d6bcbc",
         "android_client_info": {
           "package_name": "org.techtown.naro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "454961469830-5jj9clkgu7092vqurreslhjp5632qg49.apps.googleusercontent.com",
+          "client_id": "664207545845-o5qoceboq733918o513i7euhmvofl019.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "org.techtown.naro",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "454961469830-1h57u0lnc9pltcumkubk17bbgk74b5iu.apps.googleusercontent.com",
+          "client_id": "664207545845-dgolsjluq7btioalgoagil8g320mool7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBD6yhHYD5HUC73WsP9VySV_XEFjFkoOwo"
+          "current_key": "AIzaSyBncvj45h57pvCFFvLwQUjl0m4tK5xPw8I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "454961469830-1h57u0lnc9pltcumkubk17bbgk74b5iu.apps.googleusercontent.com",
+              "client_id": "664207545845-dgolsjluq7btioalgoagil8g320mool7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
