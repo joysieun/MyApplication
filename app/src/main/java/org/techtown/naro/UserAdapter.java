@@ -44,10 +44,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         information = info.get(holder.getAdapterPosition());
         holder.setInfo(information);
 
-
-
-
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
