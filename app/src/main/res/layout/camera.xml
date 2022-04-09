@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1. 체크받을 이미지를 선택해주세요."
+            android:text="체크받을 이미지를 선택해주세요."
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="이미지 최종 선택 확인 후 다음 버튼을 눌러주세요."
+            android:text="이미지 확인 후 시작 버튼을 눌러주세요."
             android:textSize="14sp"
             android:layout_weight="1"
             android:textColor="#777575" />
@@ -100,9 +100,9 @@
     <Button
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:id="@+id/btn_next"
-        android:layout_width="100dp"
+        android:id="@+id/btn_result"
+        android:layout_width="130dp"
         android:layout_height="50dp"
         android:textSize="20sp"
-        android:text="다음"/>
+        android:text="체크시작"/>
 </LinearLayout>
