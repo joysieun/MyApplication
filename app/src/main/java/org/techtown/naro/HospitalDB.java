@@ -5,10 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class HospitalDB extends SQLiteOpenHelper {
 
     public HospitalDB(Context context){
-        super(context,"hospital.db",null,2);
+        super(context,"pethospital.db",null,2);
 
     }
     @Override
@@ -19,11 +22,6 @@ public class HospitalDB extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-    }
-    public Cursor getUserList(){
-        SQLiteDatabase DB = getReadableDatabase();
-        Cursor cursor = DB.rawQuery("SELECT name, place, onoff FROM HOSPITAL ORDER BY name",null);
-        return cursor;
     }
 }
 

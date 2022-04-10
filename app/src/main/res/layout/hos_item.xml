@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/hosname"
         android:text="동물병원"
+        android:textColor="@color/black"
         android:textSize="30sp"
         />
     <TextView
@@ -15,14 +16,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/hosaddress"
         android:text="주소"
-        android:textSize="20sp"
+        android:layout_margin="4dp"
+        android:textSize="15sp"
         />
     <TextView
+        android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/onoff"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="영업시간"
+        android:layout_marginBottom="4dp"
         />
+
+
 
 </LinearLayout>
