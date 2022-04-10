@@ -31,12 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+ 케어"/>
-        <Button
-            android:id="@+id/plusmemo"
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ 메모"/>
     </LinearLayout>
 
 </LinearLayout>

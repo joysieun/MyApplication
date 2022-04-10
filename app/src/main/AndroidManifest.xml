@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-feature android:name ="android.hardware.camera" android:required="true"/>
@@ -18,10 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="ysj9hrao52"
-            />
-
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCmIhcmfiNR1aRWaUCurxCdb1rnUMHDYLY"/>
         <activity
             android:name="org.techtown.naro.Loading"
             android:exported="true">
@@ -44,15 +43,15 @@
         <activity android:name="org.techtown.naro.Camera"
             android:exported="false"
             android:parentActivityName="org.techtown.naro.MainActivity"/>
-        <activity android:name="org.techtown.naro.Memo"
-            android:exported="false"
-            android:parentActivityName="org.techtown.naro.MainActivity"/>
         <activity android:name="org.techtown.naro.Care"
             android:exported="false"
             android:parentActivityName="org.techtown.naro.MainActivity"/>
 
 
-        <provider android:name="androidx.core.content.FileProvider" android:authorities="org.techtown.naro.fileprovider" android:exported="false" android:grantUriPermissions="true"> <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" /> </provider>
+        <provider android:name="androidx.core.content.FileProvider"
+            android:authorities="org.techtown.naro.fileprovider"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" /> </provider>
 
 
     </application>

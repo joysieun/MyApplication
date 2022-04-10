@@ -7,17 +7,14 @@
         android:title="home"
         />
     <item
-        android:id="@+id/menu_disease"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="search"/>
+        android:id="@+id/mypage"
+        android:icon="@drawable/user"
+        android:title="mypage"/>
     <item
         android:id="@+id/menu_hospital"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/hos"
         android:title="hospital"
         />
-    <item
-        android:id="@+id/mypage"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="mypage"/>
+
 
 </menu>

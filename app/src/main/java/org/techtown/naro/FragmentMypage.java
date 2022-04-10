@@ -44,7 +44,6 @@ public class FragmentMypage extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
         recyclerView = rootView.findViewById(R.id.recycleview);
         pluscare = rootView.findViewById(R.id.pluscare);
-        plusmemo = rootView.findViewById(R.id.plusmemo);
         pluscare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,15 +51,6 @@ public class FragmentMypage extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
 
-            }
-        });
-
-        plusmemo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Memo.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
             }
         });
         
