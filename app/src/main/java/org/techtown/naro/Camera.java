@@ -59,6 +59,7 @@ public class Camera extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM =2; //앨범에서 사진 가져오기
     private static final int PICK_FROM_CAMERA =1; //카메라에서 사진 가져오기
     private static final int CROP_PICTURE =3; //가져온 사진 자르기
+    public static final int imageSize = 299;
     Uri photoURI;
     Uri cropURI;
     File croppedFileName;
@@ -195,51 +196,80 @@ public class Camera extends AppCompatActivity {
             return;
 
         }
-        if(requestCode == PICK_FROM_ALBUM){
-            if(data ==null){
-                return;
-            }
-            photoURI = data.getData();
-            cropImage();
+//        if(requestCode == PICK_FROM_ALBUM){
+//            if(data ==null){
+//                return;
+//            }
+//            photoURI = data.getData();
+////            cropImage();
+//        }
+//        else if (requestCode == PICK_FROM_CAMERA){
+////            cropImage();
+//            MediaScannerConnection.scanFile(Camera.this,
+//                    new String[]{photoURI.getPath()}, null,
+//                    new MediaScannerConnection.OnScanCompletedListener() {
+//                        @Override
+//                        public void onScanCompleted(String s, Uri uri) {
+//
+//                        }
+//                    });
+//        }
+//        try{
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+//
+//
+//                ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(),photoURI);
+//                bitmap = ImageDecoder.decodeBitmap(source);
+//                imageView.setImageBitmap(bitmap);
+//                Toast.makeText(this, "이미지선택이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//            else {
+//
+//                bitmap = MediaStore.Images.Media.getBitmap(Camera.this.getContentResolver(), photoURI);
+//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
+//                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+//                thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs);
+//                imageView.setImageBitmap(thumbImage);
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+
+        Bitmap image = null;
+        // handling camera images
+        if(requestCode == PICK_FROM_CAMERA){
+            image = (Bitmap) data.getExtras().get("data");
+            int dimension = Math.min(image.getWidth(), image.getHeight());
+            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+            imageView.setImageBitmap(image);
+
+            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
         }
-        else if (requestCode == PICK_FROM_CAMERA){
-            cropImage();
-            MediaScannerConnection.scanFile(Camera.this,
-                    new String[]{photoURI.getPath()}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String s, Uri uri) {
-
-                        }
-                    });
-        }else if (requestCode == CROP_PICTURE){
-
-
-            try{
-                photoURI = data.getData();
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-
-
-                    ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(),photoURI);
-                    bitmap = ImageDecoder.decodeBitmap(source);
-                    imageView.setImageBitmap(bitmap);
-                    Toast.makeText(this, "이미지선택이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-
-                }
-                else {
-
-                    bitmap = MediaStore.Images.Media.getBitmap(Camera.this.getContentResolver(), photoURI);
-                    Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
-                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                    thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs);
-                    imageView.setImageBitmap(thumbImage);
-                }
-
-            }catch (Exception e){
+        // handling gallery images
+        else if(requestCode == PICK_FROM_ALBUM){
+            assert data != null;
+            Uri dat = data.getData();
+            try {
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+            imageView.setImageBitmap(image);
+
+            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
         }
 
+
+        // Model 결과 가져오기
+        bitmap = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, false);
+
+        String[] classes = {"folliculitis","impetigo","normal","pyoderma","ringworm"};
+
+        Context context = getApplicationContext();
+        ClassifyImage classifyImage = new ClassifyImage(bitmap, 299, classes, context);
+        // 결과 class: classifyImage.result_class);
     }
 
 

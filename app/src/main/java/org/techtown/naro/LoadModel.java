@@ -86,6 +86,7 @@ public class LoadModel extends AppCompatActivity {
             }
             // handling gallery images
             else{
+                assert data != null;
                 Uri dat = data.getData();
                 try {
                     image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
