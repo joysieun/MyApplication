@@ -69,6 +69,9 @@ public class FragmentHos extends Fragment{
     TextView noDataText;
     double wantdist;
 
+    //아이템 없을 때
+    TextView empty;
+
     //네이버에서 실시간으로 정보가져오는변수
     String baseUrl = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=";
     String seoul = "서울";
@@ -121,6 +124,7 @@ public class FragmentHos extends Fragment{
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         helper = new HospitalDB(getActivity());
         database = helper.getWritableDatabase();
+
 
         recyclerView = rootView.findViewById(R.id.recycleview2);
         recyclerView.setLayoutManager(layoutManager);
@@ -246,7 +250,6 @@ public class FragmentHos extends Fragment{
     public static void setDB(Context ctx) {
         File folder = new File(ROOT_DIR);
         if (folder.exists()) {
-            Toast.makeText(ctx.getApplicationContext(),"있음",Toast.LENGTH_SHORT).show();
 
         } else {
             folder.mkdirs();
@@ -274,20 +277,6 @@ public class FragmentHos extends Fragment{
 
         }
 
-    }
-
-
-    public boolean isCheckDB(){
-        String filePath = "/data/data/org.techtown.naro/databases/pethospital.db";
-        File file = new File(filePath);
-        if(file.exists()){
-            Toast.makeText(getActivity(), "있음", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        else{
-            Toast.makeText(getActivity(), "없음", Toast.LENGTH_SHORT).show();
-            return false;
-        }
     }
 
     public void copyDB(Context mcontext){

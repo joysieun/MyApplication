@@ -77,7 +77,6 @@ public class HosMap extends AppCompatActivity implements OnMapReadyCallback {
         gpsTracker = new GpsTracker(this);
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();
-        Toast.makeText(this,latitude+","+longitude,Toast.LENGTH_SHORT).show();
 
         //id매핑
         name = findViewById(R.id.more_name);

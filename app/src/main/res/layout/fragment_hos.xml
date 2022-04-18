@@ -8,8 +8,9 @@
     tools:context=".FragmentHos">
     <TextView
         android:layout_width="match_parent"
-
-        android:layout_height="40dp"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:background="#D6E4EF"
         android:paddingLeft="10dp"
         android:text="현재위치 주변 동물병원"
@@ -21,6 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:layout_weight="1" />
+
+
 
 
 </LinearLayout>
