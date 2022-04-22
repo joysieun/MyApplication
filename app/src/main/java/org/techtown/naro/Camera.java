@@ -59,7 +59,7 @@ public class Camera extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM =2; //앨범에서 사진 가져오기
     private static final int PICK_FROM_CAMERA =1; //카메라에서 사진 가져오기
     private static final int CROP_PICTURE =3; //가져온 사진 자르기
-    public static final int imageSize = 299;
+    public static final int imageSize = 224;
     Uri photoURI;
     Uri cropURI;
     File croppedFileName;
@@ -83,6 +83,7 @@ public class Camera extends AppCompatActivity {
     String user;
     Toolbar toolbar;
     String type;
+    EditText edittext_result_class;
 
     private FirebaseAuth firebaseAuth;
     String mCurrentPhotoPath;
@@ -98,6 +99,7 @@ public class Camera extends AppCompatActivity {
         btnreset = findViewById(R.id.reset);
         btnselect = findViewById(R.id.select);
         btnresult = findViewById(R.id.btn_result);
+        edittext_result_class = findViewById(R.id.edittext_result_class);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -243,9 +245,7 @@ public class Camera extends AppCompatActivity {
             image = (Bitmap) data.getExtras().get("data");
             int dimension = Math.min(image.getWidth(), image.getHeight());
             image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-            imageView.setImageBitmap(image);
 
-            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
         }
         // handling gallery images
         else if(requestCode == PICK_FROM_ALBUM){
@@ -256,19 +256,19 @@ public class Camera extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imageView.setImageBitmap(image);
 
-            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
         }
 
+        imageView.setImageBitmap(image);
 
         // Model 결과 가져오기
-        bitmap = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, false);
+        image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
         String[] classes = {"folliculitis","impetigo","normal","pyoderma","ringworm"};
 
         Context context = getApplicationContext();
-        ClassifyImage classifyImage = new ClassifyImage(bitmap, 299, classes, context);
+        ClassifyImage classifyImage = new ClassifyImage(image, 299, classes, context);
+        edittext_result_class.setText(classifyImage.getResult_class());
         // 결과 class: classifyImage.result_class);
     }
 

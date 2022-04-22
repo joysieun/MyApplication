@@ -36,6 +36,9 @@ public class ClassifyImage{
         this.result_class = classify(get_confidence(bitmap_img, context));
     }
 
+    public String getResult_class(){
+        return this.result_class;
+    }
 
 // image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 // classifyImage(image);
@@ -73,9 +76,9 @@ public class ClassifyImage{
             for (int i = 0; i < imageSize; i++) {
                 for (int j = 0; j < imageSize; j++) {
                     int val = intValues[pixel++]; // RGB
-                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat((val & 0xFF) * (1.f / 1));
+                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 255) * 2 - 1);
+                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 255) * 2 - 1);
+                    byteBuffer.putFloat((val & 0xFF) * (1.f / 255) * 2 - 1);
                 }
             }
 
