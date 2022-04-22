@@ -145,7 +145,7 @@ public class FragmentHos extends Fragment{
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();
 
-        check(37.546364,126.9648311,1);
+        check(latitude,longitude,1);
         return rootView;
     }
 
