@@ -16,6 +16,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.soundcloud.android.crop.Crop;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.techtown.naro.ClassifyImage;
+import org.techtown.naro.GoogleLogin;
+import org.techtown.naro.MainActivity;
+import org.techtown.naro.NormalPage;
+import org.techtown.naro.R;
+import org.techtown.naro.ResultPage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,10 +66,10 @@ import java.util.Locale;
 
 public class Camera extends AppCompatActivity {
 
-    final private static String TAG ="see"; //c
-    private static final int PICK_FROM_ALBUM =2; //앨범에서 사진 가져오기
-    private static final int PICK_FROM_CAMERA =1; //카메라에서 사진 가져오기
-    private static final int CROP_PICTURE =3; //가져온 사진 자르기
+    final private static String TAG = "see"; //c
+    private static final int PICK_FROM_ALBUM = 2; //앨범에서 사진 가져오기
+    private static final int PICK_FROM_CAMERA = 1; //카메라에서 사진 가져오기
+    private static final int CROP_PICTURE = 3; //가져온 사진 자르기
 
     public static final int imageSize = 299;
     Uri photoURI;
@@ -108,7 +119,7 @@ public class Camera extends AppCompatActivity {
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
         String email = googleuser.getEmail();
         //툴바 커스텀 한거 넣기
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -132,13 +143,14 @@ public class Camera extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId()) { //c
                     case R.id.camera:
-                        dispatchTackPictureIntent();
+                        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(i, PICK_FROM_CAMERA);
                         break;
                 }
             }
         });
         //이미지 초기화
-        btnreset.setOnClickListener(new View.OnClickListener(){
+        btnreset.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -164,30 +176,41 @@ public class Camera extends AppCompatActivity {
                 byte[] data = imageViewToByte(imageView);
                 user = email;
                 type = "check";
-                Date currentTime = Calendar.getInstance().getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String getTime = dateFormat.format(currentTime);
-                ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
-                resultdb.insertdata(user, type, camera_result_class, getTime, data);
-                showDialog();
+                String a = camera_result_class;
+                if (a == "normal") {
+                    Intent intent = new Intent(getApplicationContext(), NormalPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("skinimagenormal", data);
+                    intent.putExtra("normal_class", a);
+                    getApplicationContext().startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ResultPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("skinimage", data);
+                    intent.putExtra("result_class", a);
+                    getApplicationContext().startActivity(intent);
+                }
+
+
             }
         });
 
     }
+
     //권한요청 콜백함수
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(TAG,"ONREQUESTPERMISSIONRESULT");
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-            Log.d(TAG, "permission");}
-        else{
+        Log.d(TAG, "ONREQUESTPERMISSIONRESULT");
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "permission");
+        } else {
             //권한요청 동의하지 않을 경우
             showNoPermission();
         }
     }
+
     //동의하지 않을때 함수
-    private void showNoPermission(){
+    private void showNoPermission() {
         Toast.makeText(this, "권한 요청에 동의 후 사용가능 합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
         finish();
 
@@ -240,25 +263,30 @@ public class Camera extends AppCompatActivity {
 
         Bitmap image = null;
         // handling camera images
-        if(requestCode == PICK_FROM_CAMERA){
+        if (requestCode == PICK_FROM_CAMERA) {
             image = (Bitmap) data.getExtras().get("data");
+
+
             int dimension = Math.min(image.getWidth(), image.getHeight());
             image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
         }
         // handling gallery images
-        else if(requestCode == PICK_FROM_ALBUM){
+        else if (requestCode == PICK_FROM_ALBUM) {
             assert data != null;
             Uri dat = data.getData();
+
+
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
         imageView.setImageBitmap(image);
         // Model 결과 가져오기
         image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-        String[] classes = {"folliculitis","impetigo","normal","pyoderma","ringworm"};
+        String[] classes = {"folliculitis으로 의심됩니다.", "impetigo으로 의심됩니다.", "normal입니다.", "pyoderma으로 의심됩니다.", "ringworm으로 의심됩니다."};
 
         Context context = getApplicationContext();
         ClassifyImage classifyImage = new ClassifyImage(image, 299, classes, context);
@@ -267,12 +295,19 @@ public class Camera extends AppCompatActivity {
         // 결과 class: classifyImage.result_class);
     }
 
+//    private void beginCrop(Uri source){
+//        Uri destination = Uri.fromFile(new File(getCacheDir(),"cropped"));
+//        Crop.of(source,destination).asSquare().start(this);
+//    }
 
-    private File createImageFile() throws IOException{
+
+
+
+    private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        if(!storageDir.exists()){
+        if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
         File image = File.createTempFile(
@@ -285,21 +320,22 @@ public class Camera extends AppCompatActivity {
     }
 
     //카메라촬영 호출 메소드
-    private void dispatchTackPictureIntent(){
+    private void dispatchTackPictureIntent() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//사진찍기 위한 설정
-        if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
 
-            try {photoFile = createImageFile();}
-            catch(IOException e){
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
                 Toast.makeText(Camera.this, "이미지 처리 오류입니다! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                 finish();
                 e.printStackTrace();
             }
-            if(photoFile != null){
-                photoURI = FileProvider.getUriForFile(this,"org.techtown.naro.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+            if (photoFile != null) {
+                photoURI = FileProvider.getUriForFile(this, "org.techtown.naro.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
             }
         }
@@ -308,21 +344,21 @@ public class Camera extends AppCompatActivity {
     }
 
 
-    public void cropImage(){
+    public void cropImage() {
 
-        this.grantUriPermission("com.android.camera",photoURI,Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        this.grantUriPermission("com.android.camera", photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //원본
         Intent i = new Intent("com.android.camera.action.CROP");
-        i.setDataAndType(photoURI,"image/*");  //파일 연결
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(i,0);
-        grantUriPermission(list.get(0).activityInfo.packageName,photoURI,
+        i.setDataAndType(photoURI, "image/*");  //파일 연결
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(i, 0);
+        grantUriPermission(list.get(0).activityInfo.packageName, photoURI,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         int size = list.size();
-        if(size == 0){
+        if (size == 0) {
             Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
             return;
-        }else {
+        } else {
             Toast.makeText(this, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show();
             i.putExtra("outputX", 200);
             i.putExtra("outputY", 200);
@@ -331,8 +367,13 @@ public class Camera extends AppCompatActivity {
             i.putExtra("scale", true);
             i.putExtra("crop", true);
             startActivityForResult(i, CROP_PICTURE);
-            }
         }
+    }
+//    public void onSelectImageClick(View view){
+//        CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(this);
+//    }
+
+
 
 
 
@@ -346,7 +387,7 @@ public class Camera extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch(menuItem.getItemId()){
             case android.R.id.home:
-                Intent back = new Intent(getApplicationContext(),MainActivity.class);
+                Intent back = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(back);
                 return true;
 
@@ -361,8 +402,10 @@ public class Camera extends AppCompatActivity {
 
     private Uri getImageUri(Context context, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, imageFileName, null);
         return Uri.parse(path);
     }
 
@@ -375,7 +418,9 @@ public class Camera extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+
+
+                        Intent intent = new Intent(getApplicationContext(), ResultPage.class);
                         startActivity(intent);
 
 
