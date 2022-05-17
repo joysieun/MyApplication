@@ -2,30 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
-        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
+
         <TextView
+            android:id="@+id/test"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/test"/>
-        <Button
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_using"
-            android:text="앱 사용방법 및 촬영가이드"/>
-        <Button
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="80dp"
+            android:background="#F2F6DE"
+            android:drawableStart="?android:attr/actionModeWebSearchDrawable"
+            android:drawableRight="@android:drawable/ic_media_play"
+            android:drawingCacheQuality="high"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="앱 사용방법 및 촬영가이드"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cam"
-            android:text="피부check"/>
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:paddingLeft="50dp"
+
+            android:background="@drawable/btn_green"
+            android:drawableStart="?attr/actionModePasteDrawable"
+            android:text="피부 check"
+
+            android:textSize="20sp" />
 
     </LinearLayout>
 

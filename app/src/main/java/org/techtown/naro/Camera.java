@@ -1,7 +1,7 @@
 package org.techtown.naro;
 
 import android.Manifest;
-import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,17 +9,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaScannerConnection;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,28 +36,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.soundcloud.android.crop.Crop;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-
-import org.techtown.naro.ClassifyImage;
-import org.techtown.naro.GoogleLogin;
-import org.techtown.naro.MainActivity;
-import org.techtown.naro.NormalPage;
-import org.techtown.naro.R;
-import org.techtown.naro.ResultPage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -73,21 +58,26 @@ public class Camera extends AppCompatActivity {
 
     public static final int imageSize = 299;
     Uri photoURI;
+    Matrix matrix;
+    Bitmap getbitmap;
     Uri cropURI;
     File croppedFileName;
     private String camera_result_class = "result";
+
     //사용자에게 권한 받기 위한 변수들
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA};
     //권한 동의 여부 질문 후 콜백함수에 쓰일 함수
     private static final int MULTIPLE_PERMISSIONS = 101;
+    private ClassifyImage cimg;
 
-    Button btn;
+    Button btncamera;
     Button btnresult;
     ImageView imageView;
     Button btnreset;
     Bitmap bitmap;
+    Bitmap bitmap2;
     Button btnselect;
 
     EditText editpetname;
@@ -101,6 +91,9 @@ public class Camera extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     String mCurrentPhotoPath;
 
+    // select from camera
+    Uri selectedImageUri;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,11 +101,19 @@ public class Camera extends AppCompatActivity {
         setContentView(R.layout.camera);
 
         imageView = findViewById(R.id.skin_image);
-        btn = findViewById(R.id.camera);
+        btncamera = findViewById(R.id.camera);
         btnreset = findViewById(R.id.reset);
         btnselect = findViewById(R.id.select);
         btnresult = findViewById(R.id.btn_result);
         edittext_result_class = findViewById(R.id.edittext_result_class);
+
+        // create ClassifyImage class
+        cimg = new ClassifyImage(this);
+        try {
+            cimg.init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -127,7 +128,8 @@ public class Camera extends AppCompatActivity {
 
         //권한 요청, 안드로이드 버전 확인
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "권한설정완료");
 
             } else {
@@ -138,17 +140,19 @@ public class Camera extends AppCompatActivity {
             }
         }
         //카메라 버튼
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) { //c
-                    case R.id.camera:
-                        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(i, PICK_FROM_CAMERA);
-                        break;
-                }
-            }
-        });
+//        btncamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switch (view.getId()) { //c
+//                    case R.id.camera:
+//                        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        startActivityForResult(i, PICK_FROM_CAMERA);
+//                        break;
+//                }
+//            }
+//        });
+        btncamera.setOnClickListener(v->getImageFromCamera());
+
         //이미지 초기화
         btnreset.setOnClickListener(new View.OnClickListener() {
 
@@ -159,34 +163,38 @@ public class Camera extends AppCompatActivity {
             }
         });
         //이미지 고르는 버튼 이벤트
-        btnselect.setOnClickListener(new View.OnClickListener() {
+//        btnselect.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+//                startActivityForResult(intent, PICK_FROM_ALBUM);
+//            }
+//        });
+        btnselect.setOnClickListener(v->getImageFromGallery());
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_FROM_ALBUM);
-            }
-        });
         //다음페이지로 넘어가는 이벤트
         btnresult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+
+                //다음 액티비터로 데이터 전달
                 byte[] data = imageViewToByte(imageView);
                 user = email;
                 type = "check";
-                String a = camera_result_class;
-                if (a == "normal") {
+
+                if (camera_result_class == "normal") {
                     Intent intent = new Intent(getApplicationContext(), NormalPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("skinimagenormal", data);
-                    intent.putExtra("normal_class", a);
+                    intent.putExtra("normal_class", camera_result_class);
                     getApplicationContext().startActivity(intent);
 
                 } else {
                     Intent intent = new Intent(getApplicationContext(), ResultPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("skinimage", data);
-                    intent.putExtra("result_class", a);
+                    intent.putExtra("result_class", camera_result_class);
                     getApplicationContext().startActivity(intent);
                 }
 
@@ -216,6 +224,16 @@ public class Camera extends AppCompatActivity {
 
     }
 
+    private void getImageFromCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
+    }
+
+    private void getImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -225,74 +243,74 @@ public class Camera extends AppCompatActivity {
             return;
         }
 
-//        if (requestCode == PICK_FROM_ALBUM) {
-//            if (data == null) {
-//                return;
-//            }
-//            photoURI = data.getData();
-//            cropImage();
-//        } else if (requestCode == PICK_FROM_CAMERA) {
-//            cropImage();
-//            MediaScannerConnection.scanFile(Camera.this,
-//                    new String[]{photoURI.getPath()}, null,
-//                    new MediaScannerConnection.OnScanCompletedListener() {
-//                        @Override
-//                        public void onScanCompleted(String s, Uri uri) {
-//                        }
-//                    });
-//        } else if (requestCode == CROP_PICTURE) {
-//            try {
-//                photoURI = data.getData();
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                    ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoURI);
-//                    bitmap = ImageDecoder.decodeBitmap(source);
-//                    imageView.setImageBitmap(bitmap);
-//                    Toast.makeText(this, "이미지선택이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoURI);
-//                    bitmap = ImageDecoder.decodeBitmap(source);
-//                    imageView.setImageBitmap(bitmap);
-//                    Toast.makeText(this, "이미지선택이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+        if (requestCode == PICK_FROM_ALBUM) {
+            if (data == null) {
+                return;
+            }
+            Uri selectedImage = data.getData();
+//            Bitmap bitmap = null;
 
-//        }
+            try{
+                if(Build.VERSION.SDK_INT >=29) {
+                    photoURI =data.getData();
+                    cropImage();
 
-        Bitmap image = null;
-        // handling camera images
-        if (requestCode == PICK_FROM_CAMERA) {
-            image = (Bitmap) data.getExtras().get("data");
-
-
-            int dimension = Math.min(image.getWidth(), image.getHeight());
-            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+                }
+                else{
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),
+                            selectedImage);
+                }
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to read Image", ioe);
+            }
         }
-        // handling gallery images
-        else if (requestCode == PICK_FROM_ALBUM) {
-            assert data != null;
-            Uri dat = data.getData();
+        else if (requestCode == PICK_FROM_CAMERA){
+            try{
+                if(Build.VERSION.SDK_INT >=29) {
 
+                    bitmap2 = (Bitmap) data.getExtras().get("data");
+//
+//                    matrix = new Matrix();
+//                    matrix.setScale(1.5f,3f); //넓이를 1.5배,높이를 1.5배 확대
+//                    getbitmap = Bitmap.createBitmap(bitmap2, 0, 0, bitmap2.getWidth(), bitmap2.getHeight(), matrix, true);
+//                    bitmap2.recycle();
+                    photoURI = getImageUri(this, bitmap2);
+                    cropImage();
+                }
+                else{
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(),
+                            selectedImageUri);
+                }
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to read Image", ioe);
+            }
+        }
+        else if (requestCode == CROP_PICTURE) {
 
+            photoURI = data.getData();
+            ContentResolver resolver = getContentResolver();
+            InputStream inputStream = null;
             try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
-            } catch (IOException e) {
+                inputStream = resolver.openInputStream(photoURI);
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
+            }
+            bitmap=BitmapFactory.decodeStream(inputStream);
+
+            if (bitmap != null) {
+                Pair<String, Float> output = cimg.classify(bitmap);
+                String resultStr = String.format(Locale.ENGLISH,
+                        "class : %s, prob : %.2f%%",
+                        output.first, output.second * 100);
+                edittext_result_class.setText(resultStr);
+                imageView.setImageBitmap(bitmap);
+                camera_result_class = output.first;
+                // 결과 class: output.first;
             }
         }
 
-        imageView.setImageBitmap(image);
-        // Model 결과 가져오기
-        image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-        String[] classes = {"folliculitis으로 의심됩니다.", "impetigo으로 의심됩니다.", "normal입니다.", "pyoderma으로 의심됩니다.", "ringworm으로 의심됩니다."};
 
-        Context context = getApplicationContext();
-        ClassifyImage classifyImage = new ClassifyImage(image, 299, classes, context);
-        camera_result_class = classifyImage.getResult_class();
-        edittext_result_class.setText(camera_result_class);
-        // 결과 class: classifyImage.result_class);
     }
 
 //    private void beginCrop(Uri source){
@@ -346,8 +364,7 @@ public class Camera extends AppCompatActivity {
 
     public void cropImage() {
 
-        this.grantUriPermission("com.android.camera", photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         //원본
         Intent i = new Intent("com.android.camera.action.CROP");
         i.setDataAndType(photoURI, "image/*");  //파일 연결

@@ -15,10 +15,12 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         />
     <LinearLayout
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#FFFFFF">
+        android:background="#EBF1B5">
         <LinearLayout
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -37,7 +39,7 @@
                 android:id="@+id/infopage_img"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/plus"
+                android:src="@drawable/btn_green"
                 />
             <LinearLayout
                 android:layout_marginLeft="10dp"
@@ -135,23 +137,29 @@
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
+
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <Button
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_doginfo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:layout_width="47dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:text="등록"/>
-            <Button
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/btn_yell"
+                android:text="등록"
+                android:textSize="10sp" />
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_modify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:layout_width="47dp"
+                android:layout_height="35dp"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/btn_yell"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:text="수정"/>

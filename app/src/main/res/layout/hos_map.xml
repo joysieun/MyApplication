@@ -5,7 +5,8 @@
     android:layout_marginLeft="20dp"
     android:orientation="vertical"
     android:layout_marginRight="20dp"
-    android:layout_marginBottom="30dp">
+    android:layout_marginBottom="30dp"
+    android:background="#F2F6DE">
     <TextView
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"

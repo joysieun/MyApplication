@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center" >
+    android:gravity="center"
+    android:background="#F2F6DE">
     <TextView
 
         android:layout_width="match_parent"
@@ -40,13 +42,13 @@
             android:layout_marginBottom="5dp"/>
 
         <ImageView
-            android:adjustViewBounds="true"
             android:id="@+id/pet_face"
             android:layout_width="106dp"
             android:layout_height="wrap_content"
-            android:maxHeight="110dp"
+            android:adjustViewBounds="true"
             android:background="@drawable/layout_background"
-            android:src="@drawable/plus" />
+            android:maxHeight="110dp"
+            app:srcCompat="@android:drawable/ic_input_add" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_gravity="left"
@@ -126,13 +128,13 @@
         </LinearLayout>
 
     </LinearLayout>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_savedoginfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="등록"
         android:layout_gravity="center"
-        android:background="@drawable/layout_background"
+        android:background="@drawable/btn_green"
         android:textStyle="bold"
         />
 
