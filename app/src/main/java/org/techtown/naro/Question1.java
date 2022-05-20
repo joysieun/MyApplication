@@ -1,8 +1,13 @@
 package org.techtown.naro;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -16,8 +21,21 @@ public class Question1 extends AppCompatActivity {
     byte[] img;
     String result;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            // Apply activity transition
+//            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//            Slide slide = new Slide();
+//            slide.setDuration(1000);
+//            getWindow().setEnterTransition(slide);
+//            getWindow().setExitTransition(slide);
+//
+//        } else {
+//            // Swap without transition
+//        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.question1);
 
@@ -34,7 +52,7 @@ public class Question1 extends AppCompatActivity {
                 intent.putExtra("score",count);
                 intent.putExtra("img1",img);
                 intent.putExtra("result1",result);
-                getApplicationContext().startActivity(intent);
+                getApplicationContext().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Question1.this).toBundle());
             }
         });
         no.setOnClickListener(new View.OnClickListener() {

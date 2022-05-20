@@ -47,16 +47,19 @@ public class MemoFragment extends Fragment {
             thattime =bundle.getString("key");
         }
 
-
-
-
-
         adapter = new MemoAdapter();
         recyclerView.setAdapter(adapter);
         memo = rootview.findViewById(R.id.tv_memo);
         getUserList(thattime);
         return rootview;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserList(thattime);
+    }
+
+
 
     private void getUserList(String time){
         adapter.removeAllItem();
@@ -71,4 +74,5 @@ public class MemoFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
     }
+
 }

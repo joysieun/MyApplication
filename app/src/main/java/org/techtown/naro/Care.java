@@ -69,6 +69,7 @@ public class Care extends AppCompatActivity {
             }
         });
 
+
         carebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,16 +88,14 @@ public class Care extends AppCompatActivity {
                     String getTime = dateFormat.format(currentTime);
                     ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
                     resultdb.insertdata(user, type, caretitle,carecontext , getTime, data);
-                    Intent i = new Intent(Care.this, MainActivity.class);
-                    startActivity(i);
+                    finish();
                 }
             }});
 
         caresuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Care.this, MainActivity.class);
-                startActivity(i);
+                finish();
             }
         });
     }
@@ -125,6 +124,7 @@ public class Care extends AppCompatActivity {
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }
+
 }
 
 

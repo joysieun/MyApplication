@@ -116,6 +116,12 @@ public class FragmentMypage extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserList();
+    }
+
     private void getUserList(){
         println("<<<getUserList()>>>");
         adapter.removeAllItem();

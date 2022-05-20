@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F2F6DE"
+    >
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dogicon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:text="반려동물 건강 기록하기"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/btn_closechoose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_vacci"
+            android:layout_marginLeft="70dp"
+            android:background="@drawable/btn_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="예방접종"/>
+        <androidx.appcompat.widget.AppCompatButton
+
+            android:id="@+id/btn_care"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/btn_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="헬스케어"/>
+
+    </LinearLayout>
+
+</LinearLayout>

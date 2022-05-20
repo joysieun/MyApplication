@@ -62,6 +62,7 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home,container,false);
         button = (Button) view.findViewById(R.id.btn_cam);
         btn_using = (Button) view.findViewById(R.id.btn_using);
+        textView = (TextView)view.findViewById(R.id.text1);
 
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();

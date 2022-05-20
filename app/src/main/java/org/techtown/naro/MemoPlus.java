@@ -43,15 +43,13 @@ public class MemoPlus extends AppCompatActivity {
                 memo = editText.getText().toString();
                 MemoDB memodb = new MemoDB(getApplicationContext(), "Memo.db", null, 2);
                 memodb.insertmemodata(email, memo, time);
-                Intent i = new Intent(getApplicationContext(),MypageResult.class);
-                startActivity(i);
+                finish();
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),MypageResult.class);
-                startActivity(i);
+                finish();
             }
         });
 
@@ -60,4 +58,5 @@ public class MemoPlus extends AppCompatActivity {
 
 
     }
+
 }
