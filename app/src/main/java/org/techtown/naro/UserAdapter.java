@@ -6,11 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,7 +91,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.morebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = holder.getAdapterPosition();
@@ -190,6 +188,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private CardView cardView;
         private TextView ttile;
         private TextView more;
+        private ImageView morebtn;
         private ImageView deletebtn;
 
         public ViewHolder(View infoView){
@@ -199,6 +198,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             imgskin = infoView.findViewById(R.id.skin_user);
             cardView = infoView.findViewById(R.id.card);
             deletebtn = infoView.findViewById(R.id.btn_delete);
+            morebtn = infoView.findViewById(R.id.btn_more);
             ttile = infoView.findViewById(R.id.pet_result);
         }
         public void setInfo(Result pr){

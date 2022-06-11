@@ -13,9 +13,9 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -48,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class Camera extends AppCompatActivity {
 
@@ -64,13 +65,15 @@ public class Camera extends AppCompatActivity {
     File croppedFileName;
     private String camera_result_class = "result";
 
+    private ClassifyImage cls;
+
     //사용자에게 권한 받기 위한 변수들
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA};
     //권한 동의 여부 질문 후 콜백함수에 쓰일 함수
     private static final int MULTIPLE_PERMISSIONS = 101;
-    private ClassifyImage cimg;
+
 
     Button btncamera;
     Button btnresult;
@@ -108,9 +111,9 @@ public class Camera extends AppCompatActivity {
         edittext_result_class = findViewById(R.id.edittext_result_class);
 
         // create ClassifyImage class
-        cimg = new ClassifyImage(this);
+        cls = new ClassifyImage(this);
         try {
-            cimg.init();
+            cls.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,7 +154,7 @@ public class Camera extends AppCompatActivity {
 //                }
 //            }
 //        });
-        btncamera.setOnClickListener(v->getImageFromCamera());
+        btncamera.setOnClickListener(v -> getImageFromCamera());
 
         //이미지 초기화
         btnreset.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +175,7 @@ public class Camera extends AppCompatActivity {
 //                startActivityForResult(intent, PICK_FROM_ALBUM);
 //            }
 //        });
-        btnselect.setOnClickListener(v->getImageFromGallery());
+        btnselect.setOnClickListener(v -> getImageFromGallery());
 
         //다음페이지로 넘어가는 이벤트
         btnresult.setOnClickListener(new View.OnClickListener() {
@@ -250,23 +253,21 @@ public class Camera extends AppCompatActivity {
             Uri selectedImage = data.getData();
 //            Bitmap bitmap = null;
 
-            try{
-                if(Build.VERSION.SDK_INT >=29) {
-                    photoURI =data.getData();
+            try {
+                if (Build.VERSION.SDK_INT >= 29) {
+                    photoURI = data.getData();
                     cropImage();
 
-                }
-                else{
+                } else {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),
                             selectedImage);
                 }
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to read Image", ioe);
             }
-        }
-        else if (requestCode == PICK_FROM_CAMERA){
-            try{
-                if(Build.VERSION.SDK_INT >=29) {
+        } else if (requestCode == PICK_FROM_CAMERA) {
+            try {
+                if (Build.VERSION.SDK_INT >= 29) {
 
                     bitmap2 = (Bitmap) data.getExtras().get("data");
 //
@@ -276,8 +277,7 @@ public class Camera extends AppCompatActivity {
 //                    bitmap2.recycle();
                     photoURI = getImageUri(this, bitmap2);
                     cropImage();
-                }
-                else{
+                } else {
                     bitmap = MediaStore.Images.Media.getBitmap(
                             getContentResolver(),
                             selectedImageUri);
@@ -285,33 +285,56 @@ public class Camera extends AppCompatActivity {
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to read Image", ioe);
             }
-        }
-        else if (requestCode == CROP_PICTURE) {
+        } else if (requestCode == CROP_PICTURE) {
 
             photoURI = data.getData();
             ContentResolver resolver = getContentResolver();
+
             InputStream inputStream = null;
             try {
                 inputStream = resolver.openInputStream(photoURI);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            bitmap=BitmapFactory.decodeStream(inputStream);
+            bitmap = BitmapFactory.decodeStream(inputStream);
 
             if (bitmap != null) {
-                Pair<String, Float> output = cimg.classify(bitmap);
+
+                Map<String, Float> output = cls.classify(bitmap);
+                Pair<String, Float> max_class = cls.argmax(output);
+
+                output.remove(max_class.first, max_class.second);
+                Pair<String, Float> second_class = cls.argmax(output);
+
+                output.remove(second_class.first, second_class.second);
+                Pair<String, Float> third_class = cls.argmax(output);
+
+                output.remove(third_class.first, third_class.second);
+                Pair<String, Float> last_class = cls.argmax(output);
+
                 String resultStr = String.format(Locale.ENGLISH,
-                        "class : %s, prob : %.2f%%",
-                        output.first, output.second * 100);
-                edittext_result_class.setText(resultStr);
+                        "%s이 %.2f%%,\n%s이 %.2f%%로 의심됩니다.",
+                        max_class.first, max_class.second * 100,
+                        second_class.first, second_class.second * 100);
+                camera_result_class = resultStr;
+
                 imageView.setImageBitmap(bitmap);
-                camera_result_class = output.first;
+
+//                Pair<String, Float> output = cimg.classify(bitmap);
+//                String resultStr = String.format(Locale.ENGLISH,
+//                        "class : %s, prob : %.2f%%",
+//                        output.first, output.second * 100);
+//
+//                imageView.setImageBitmap(bitmap);
+//                camera_result_class = output.first;
                 // 결과 class: output.first;
             }
         }
 
 
     }
+
+
 
 //    private void beginCrop(Uri source){
 //        Uri destination = Uri.fromFile(new File(getCacheDir(),"cropped"));

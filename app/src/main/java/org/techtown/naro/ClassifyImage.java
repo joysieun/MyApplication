@@ -84,7 +84,7 @@ public class ClassifyImage{
     }
 
     // 추론 결과 해석: Map<String, Float> 자료구조를 처리하는 argmax 메소드
-    private Pair<String, Float> argmax(Map<String, Float> map) {
+    public Pair<String, Float> argmax(Map<String, Float> map) {
         String maxKey = "";
         float maxVal = -1;
 
@@ -98,8 +98,23 @@ public class ClassifyImage{
         return new Pair<>(maxKey, maxVal);
     }
 
+
     // 추론 결과 해석: 모델 출력과 label 매핑
-    public Pair<String, Float> classify(Bitmap image) {
+//    public Pair<String, Float> classify(Bitmap image) {
+//        inputImage = loadImage(image);
+//        Object[] inputs = new Object[]{inputImage.getBuffer()};
+//        Map<Integer, Object> outputs = new HashMap<>();
+//        outputs.put(0, outputBuffer.getBuffer().rewind());
+//
+//        model.run(inputs, outputs);
+//
+//        Map<String, Float> output =
+//                new TensorLabel(labels, outputBuffer).getMapWithFloatValue();
+//
+//        return argmax(output);
+//    }
+
+    public Map<String, Float> classify(Bitmap image) {
         inputImage = loadImage(image);
         Object[] inputs = new Object[]{inputImage.getBuffer()};
         Map<Integer, Object> outputs = new HashMap<>();
@@ -107,10 +122,7 @@ public class ClassifyImage{
 
         model.run(inputs, outputs);
 
-        Map<String, Float> output =
-                new TensorLabel(labels, outputBuffer).getMapWithFloatValue();
-
-        return argmax(output);
+        return new TensorLabel(labels, outputBuffer).getMapWithFloatValue();
     }
 
     // 자원 해제

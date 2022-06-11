@@ -35,12 +35,12 @@ public class QuestionResult extends AppCompatActivity {
 
     byte[] img;
 
-    String level1 ="집에서 충분히 케어 가능합니다.";
-    String level2 = "초기단계입니다. 집에서 케어 가능하고 더 심해지면 동물병원 방문하세요";
-    String level3 = "증상이 약간 진행된 상태입니다. 동물병원을 방문하기를 권유합니다.";
-    String level4 = "심각한 단계로 보입니다. 즉시 동물병원을 방문하세요";
-    String allergy = "알러지성 피부병일 수 있으므로 방문했던 동물병원을 방문하세요";
-    String mold = "곰팡이성 피부병은 사람에게 옮길수 있으므로 즉시 동물병원을 방문하세요";
+    String level1 ="\n집에서 충분히 케어 가능합니다.\n";
+    String level2 = "\n초기단계입니다.\n 집에서 케어 가능하고 증상이 지속되면 동물병원을 방문하세요.\n";
+    String level3 = "\n증상이 약간 진행된 상태입니다.\n 동물병원 방문을 권유합니다.\n";
+    String level4 = "\n심각한 단계로 보입니다.\n 즉시 동물병원을 방문하세요.\n";
+    String allergy = "\n알러지성 피부병일 수 있으므로 관련 치료를 받았던 동물병원을 방문하세요.\n";
+    String mold = "\n곰팡이성 피부병은 사람에게 옮길수 있으므로 즉시 동물병원을 방문하세요.\n";
     String sb;
 
     @Override

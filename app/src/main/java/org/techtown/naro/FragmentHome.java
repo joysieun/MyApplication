@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,26 +16,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public class FragmentHome extends Fragment {
     private View view;
     private Button button;
-    private Button btn_using;
+    private Button btn_guide;
     TextView textView;
     DogDB dogDB;
     SQLiteDatabase DB;
@@ -61,7 +51,7 @@ public class FragmentHome extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home,container,false);
         button = (Button) view.findViewById(R.id.btn_cam);
-        btn_using = (Button) view.findViewById(R.id.btn_using);
+        btn_guide = (Button) view.findViewById(R.id.btn_using);
         textView = (TextView)view.findViewById(R.id.text1);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -91,6 +81,16 @@ public class FragmentHome extends Fragment {
 
             }
         });
+        btn_guide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),AppGuide.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
+
+
         return view;
 
     }

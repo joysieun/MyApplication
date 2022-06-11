@@ -8,11 +8,11 @@
         />
     <item
         android:id="@+id/mypage"
-        android:icon="@drawable/user"
+        android:icon="?attr/actionModePasteDrawable"
         android:title="mypage"/>
     <item
         android:id="@+id/menu_hospital"
-        android:icon="@drawable/hos"
+        android:icon="@android:drawable/ic_dialog_map"
         android:title="hospital"
         />
 

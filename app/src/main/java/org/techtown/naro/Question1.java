@@ -24,18 +24,6 @@ public class Question1 extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            // Apply activity transition
-//            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-//            Slide slide = new Slide();
-//            slide.setDuration(1000);
-//            getWindow().setEnterTransition(slide);
-//            getWindow().setExitTransition(slide);
-//
-//        } else {
-//            // Swap without transition
-//        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.question1);
 
@@ -52,7 +40,7 @@ public class Question1 extends AppCompatActivity {
                 intent.putExtra("score",count);
                 intent.putExtra("img1",img);
                 intent.putExtra("result1",result);
-                getApplicationContext().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Question1.this).toBundle());
+                getApplicationContext().startActivity(intent);
             }
         });
         no.setOnClickListener(new View.OnClickListener() {

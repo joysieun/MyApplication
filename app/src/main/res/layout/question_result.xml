@@ -37,23 +37,25 @@
         android:src="@drawable/hos"
         />
     <TextView
+        android:background="@drawable/layout_background"
         android:gravity="center_horizontal"
         android:id="@+id/tv_Qresult"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_marginTop="20dp"
-        android:layout_height="200dp"
-        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"
         android:text="모낭염으로 의심됩니다." />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_green"
         android:id="@+id/btn_Qhospital"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="근처 동물병원 찾기"/>
+        android:text="홈페이지로 돌아가기"/>
 
 
 </LinearLayout>

@@ -114,6 +114,10 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".AppGuide"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".MypageCheck"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
