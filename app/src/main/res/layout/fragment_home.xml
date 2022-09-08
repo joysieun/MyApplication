@@ -15,11 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        //margin bottom 원래 80dp
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_using"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="20dp"
             android:background="#F2F6DE"
             android:drawableStart="?android:attr/actionModeWebSearchDrawable"
             android:drawableRight="@android:drawable/ic_media_play"
@@ -33,20 +34,37 @@
             android:id="@+id/btn_cam"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/btn_green"
             android:drawableStart="?attr/actionModePasteDrawable"
-            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="50dp"
-            android:text="피부 check"
+            android:text=" 사진으로 진단하기"
 
             android:textSize="20sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_chatting"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_green"
+            android:drawableStart="?attr/actionModePasteDrawable"
+            android:gravity="center_vertical"
+            android:paddingLeft="50dp"
+            android:text=" 챗봇으로 진단하기"
+
+            android:textSize="20sp" />
+
         <LinearLayout
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

@@ -24,8 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -44,6 +42,7 @@ public class DogInfo extends AppCompatActivity {
     EditText dog_birth;
     ImageView pet_face;
     Button btn_savedoginfo;
+    Button btn_closedoginfo;
     FirebaseAuth firebaseAuth;
     String dname;
     String dage;
@@ -66,6 +65,7 @@ public class DogInfo extends AppCompatActivity {
         dog_age = (EditText) findViewById(R.id.dog_age);
         dog_birth = (EditText) findViewById(R.id.dog_birth);
         btn_savedoginfo = (Button) findViewById(R.id.btn_savedoginfo);
+        btn_closedoginfo = findViewById(R.id.btn_closedoginfo);
         pet_face = findViewById(R.id.pet_face);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -114,6 +114,12 @@ public class DogInfo extends AppCompatActivity {
                 }
 
 
+            }
+        });
+        btn_closedoginfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

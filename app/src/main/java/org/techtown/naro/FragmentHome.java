@@ -27,7 +27,8 @@ import java.io.InputStream;
 
 public class FragmentHome extends Fragment {
     private View view;
-    private Button button;
+    private Button camera;
+    private Button chatting;
     private Button btn_guide;
     TextView textView;
     DogDB dogDB;
@@ -50,7 +51,8 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home,container,false);
-        button = (Button) view.findViewById(R.id.btn_cam);
+        camera = (Button) view.findViewById(R.id.btn_cam);
+        chatting = (Button) view.findViewById(R.id.btn_chatting);
         btn_guide = (Button) view.findViewById(R.id.btn_using);
         textView = (TextView)view.findViewById(R.id.text1);
 
@@ -63,7 +65,7 @@ public class FragmentHome extends Fragment {
         setDB(getActivity());
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -79,6 +81,15 @@ public class FragmentHome extends Fragment {
                     startActivity(intent);
                 }
 
+            }
+        });
+
+        chatting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),Chatting.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
             }
         });
         btn_guide.setOnClickListener(new View.OnClickListener() {

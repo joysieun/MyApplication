@@ -36,7 +36,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -55,6 +58,10 @@ public class MainActivity extends AppCompatActivity  {
     String name;
     Button btn_doginfo;
     Button btn_modify;
+    String time;
+
+    ChatAdapter adapter;
+
 
     TextView textView;
     SQLiteDatabase database;
@@ -70,6 +77,18 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        time = dateFormat.format(currentTime);
+
+
+
+
+
+
 
 
         try {
@@ -111,6 +130,7 @@ public class MainActivity extends AppCompatActivity  {
         fragmentHos = new FragmentHos();
         fragmentMypage = new FragmentMypage();
         fragmentHome = new FragmentHome();
+
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.containers,fragmentHome).commit();
@@ -180,6 +200,7 @@ public class MainActivity extends AppCompatActivity  {
                         transaction.replace(R.id.containers,fragmentMypage).commitAllowingStateLoss();
                         break;
                     }
+
 
             }
             return true;

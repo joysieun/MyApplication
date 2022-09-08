@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:textSize="10sp"
             android:layout_height="wrap_content"
-            android:text="이미지 선택은 필수가 아닙니다."
+
             android:textColor="#EF9B9B"/>
 
         <ImageView
