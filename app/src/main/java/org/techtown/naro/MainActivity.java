@@ -29,8 +29,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -38,10 +36,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity  {
 
-    FragmentInfo fragmentInfo;
+
     FragmentHos fragmentHos;
     FragmentMypage fragmentMypage;
     FragmentHome fragmentHome;
@@ -56,14 +58,16 @@ public class MainActivity extends AppCompatActivity  {
     String name;
     Button btn_doginfo;
     Button btn_modify;
+    String time;
+
+    ChatAdapter adapter;
+
 
     TextView textView;
     SQLiteDatabase database;
 
 
 
-    private NaverMap naverMap;
-    private FusedLocationSource locationSource;
     private static final int LOCATION_PERMISSION_REQUEST_CODE =1000;
     private static final String[] PERMISSIONS={
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
@@ -73,6 +77,18 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        time = dateFormat.format(currentTime);
+
+
+
+
+
+
 
 
         try {
@@ -88,7 +104,7 @@ public class MainActivity extends AppCompatActivity  {
         } catch (Exception e) {
         }
         //db 조회
-        String databaseName = "hospital.db";
+        String databaseName = "pethospital.db";
         createDatabase(databaseName);
 
 
@@ -111,10 +127,10 @@ public class MainActivity extends AppCompatActivity  {
         btn_modify = findViewById(R.id.btn_modify);
 
 
-        fragmentInfo = new FragmentInfo();
         fragmentHos = new FragmentHos();
         fragmentMypage = new FragmentMypage();
         fragmentHome = new FragmentHome();
+
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.containers,fragmentHome).commit();
@@ -137,7 +153,13 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-
+        btn_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), DogInfodetail.class);
+                startActivity(intent);
+            }
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser googleuser = firebaseAuth.getCurrentUser();
@@ -147,6 +169,7 @@ public class MainActivity extends AppCompatActivity  {
         dogDB = new DogDB(MainActivity.this,"Dog.db",null,2);
         Dog dog = new Dog();
         settingdoginfo(dog);
+
 
 
 
@@ -160,11 +183,6 @@ public class MainActivity extends AppCompatActivity  {
                 case R.id.menu_home:
                     transaction.replace(R.id.containers,fragmentHome).commitAllowingStateLoss();
                     break;
-
-                case R.id.menu_disease:
-                    transaction.replace(R.id.containers,fragmentInfo).commitAllowingStateLoss();
-                    break;
-
 
                 case R.id.menu_hospital:
                     transaction.replace(R.id.containers,fragmentHos).commitAllowingStateLoss();
@@ -182,6 +200,7 @@ public class MainActivity extends AppCompatActivity  {
                         transaction.replace(R.id.containers,fragmentMypage).commitAllowingStateLoss();
                         break;
                     }
+
 
             }
             return true;
@@ -237,7 +256,7 @@ public class MainActivity extends AppCompatActivity  {
 
     //db 있는지 확인
     public boolean isCheckDB(){
-        String filePath = "/data/data/org.techtown.myapplication/databases/hospital.db";
+        String filePath = "/data/data/org.techtown.naro/databases/pethospital.db";
         File file = new File(filePath);
         if (file.exists()) {
 
@@ -248,8 +267,8 @@ public class MainActivity extends AppCompatActivity  {
     public void copyDB(Context mContext){
         Log.d("MiniApp", "copyDB");
         AssetManager manager = mContext.getAssets();
-        String folderPath = "/data/data/org.techtown.myapplication/databases";
-        String filePath = "/data/data/org.techtown.myapplication/databases/hospital.db";
+        String folderPath = "/data/data/org.techtown.naro/databases";
+        String filePath = "/data/data/org.techtown.naro/databases/pethospital.db";
         File folder = new File(folderPath);
         File file = new File(filePath);
 
@@ -257,7 +276,7 @@ public class MainActivity extends AppCompatActivity  {
         BufferedOutputStream bos = null;
         try {
 
-            InputStream is = manager.open("db/hospital.db");
+            InputStream is = manager.open("db/pethospital.db");
             BufferedInputStream bis = new BufferedInputStream(is);
 
             if (folder.exists()) {
@@ -296,30 +315,6 @@ public class MainActivity extends AppCompatActivity  {
     private void createDatabase(String name) {
         database = openOrCreateDatabase(name, MODE_PRIVATE, null);
     }
-
-
-    public void executeQuery() {
-
-        // 본인의 columns name and table name
-        Cursor cursor = database.rawQuery("select name,tel, onoff,place1,Latitude,Longitude from Hospital", null);
-        int recordCount = cursor.getCount();
-
-
-//        for (int i = 0; i < recordCount; i++) {
-        // 10개 레코드만 출력해보기
-        for (int i = 0; i < 10; i++) {
-            cursor.moveToNext();
-
-            // 본인의 데이터 타입이 string 인지 int인지에 맞게
-            String bank = cursor.getString(0);
-            String brunch_nm = cursor.getString(1);
-            String brunch_ad = cursor.getString(2);
-//            int age = cursor.getInt(3); // int 예시
-
-        }
-        cursor.close();
-    }
-
 
 
 

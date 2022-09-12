@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F2F6DE">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문답"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:background="@drawable/layout_background"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dogicon"/>
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:layout_marginRight="60dp"
+                android:layout_gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q5. 피부의 붉은 부분이"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="원형으로 보이시나요?"
+            />
+        <LinearLayout
+            android:layout_marginBottom="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/yes5"
+                android:background="@drawable/btn_yes"
+                android:textColor="@color/white"
+                android:layout_marginRight="20dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:text="예"
+                android:textSize="20sp"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@drawable/btn_no"
+                android:textColor="@color/white"
+                android:id="@+id/no5"
+                android:layout_marginLeft="20dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:text="아니요"
+                android:textSize="20sp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

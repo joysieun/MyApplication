@@ -69,13 +69,14 @@ public class Care extends AppCompatActivity {
             }
         });
 
+
         carebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 byte[] data = imageViewToByte(img_care);
                 user = email;
                 type = "care";
-                carecontext = carehospital.getText().toString();
+                carecontext = carecontent.getText().toString();
                 caretitle = carehospital.getText().toString();
 
                 if(carecontext.length() == 0 || caretitle.length() == 0){
@@ -86,17 +87,15 @@ public class Care extends AppCompatActivity {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String getTime = dateFormat.format(currentTime);
                     ResultDB resultdb = new ResultDB(getApplicationContext(), "Result.db", null, 2);
-                    resultdb.insertdata(user, type, caretitle, getTime, data);
-                    Intent i = new Intent(Care.this, MainActivity.class);
-                    startActivity(i);
+                    resultdb.insertdata(user, type, caretitle,carecontext , getTime, data);
+                    finish();
                 }
             }});
 
         caresuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Care.this, MainActivity.class);
-                startActivity(i);
+                finish();
             }
         });
     }
@@ -125,6 +124,7 @@ public class Care extends AppCompatActivity {
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }
+
 }
 
 

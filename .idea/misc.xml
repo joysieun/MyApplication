@@ -34,6 +34,57 @@
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/menu/bottom_menu.xml" value="0.253125" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/menu/toolbar_menu.xml" value="0.2" />
         <entry key="..\:/Users/82104/AndroidStudioProjects/MyApplication2/app/src/main/res/xml/file_paths.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/background_chatbot.xml" value="0.265625" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/background_chatuser.xml" value="0.265625" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/bottom_menu_color.xml" value="0.265625" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/btn_green.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/btn_no.xml" value="0.159375" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/btn_yell.xml" value="0.159375" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/btn_yes.xml" value="0.159375" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/drawable/layout_background.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/activity_detail.xml" value="0.22837370242214533" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/activity_loading.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/activity_main.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/app_guide.xml" value="0.16023738872403562" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/camera.xml" value="0.21226415094339623" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/care_activity.xml" value="0.2" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/chat_items.xml" value="0.11197916666666667" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/chatbot_items.xml" value="0.6" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/chatting_frame.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/chatuser_items.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/choose.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/crawling.xml" value="0.14764492753623187" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/dog_info.xml" value="0.3623445825932504" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_chat.xml" value="0.128" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_hos.xml" value="0.29916897506925205" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_memo.xml" value="0.1682600382409178" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_mypage.xml" value="0.264" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/fragment_onoff.xml" value="0.17119565217391305" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/hos_item.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/hos_map.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/image_cut.xml" value="0.12107396149949341" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/login_google.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/login_page.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/memo_items.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/memo_plus.xml" value="0.2" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/mypage_check.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/mypage_result.xml" value="0.2" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/normal_page.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/plus_vaccination.xml" value="0.152" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question1.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question2.xml" value="0.2609375" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question3.xml" value="0.2609375" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question4.xml" value="0.2" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question5.xml" value="0.16" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/question_result.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/register.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/resultpage.xml" value="0.264" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/row_chat.xml" value="0.1" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/layout/user_item.xml" value="0.264" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/menu/bottom_menu.xml" value="0.264" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/menu/toolbar_basic_menu.xml" value="0.4" />
+        <entry key="..\:/Users/82104/AndroidStudioProjects/Naro/app/src/main/res/menu/toolbar_menu.xml" value="0.152" />
       </map>
     </option>
   </component>

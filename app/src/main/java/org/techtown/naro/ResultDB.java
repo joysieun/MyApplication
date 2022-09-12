@@ -20,6 +20,7 @@ public class ResultDB extends SQLiteOpenHelper {
     public static final String COLUMN_TYPE = "cardtype"; // 메모인지, 피부체크인지, 케어인지
     public static final String COLUMN_SKIN_IMAGE = "skin_image"; //피부이미지
     public static final String COLUMN_RESULT = "p_result"; //진단결과
+    public static final String COLUMN_RESULT_MORE = "p_result_more";// 더 자세한 결과
     public static final String COLUMN_TIME = "ctime"; //날짜
 
     FirebaseAuth firebaseAuth;
@@ -32,7 +33,7 @@ public class ResultDB extends SQLiteOpenHelper {
     //테이블 생성
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_NAME+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,  userid TEXT, cardtype TEXT, p_result TEXT, ctime TEXT, skin_image BLOB );");
+        sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_NAME+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,  userid TEXT, cardtype TEXT, p_result TEXT, p_result_more TEXT, ctime TEXT, skin_image BLOB );");
     }
 
     @Override
@@ -41,13 +42,14 @@ public class ResultDB extends SQLiteOpenHelper {
     }
 
     //결과에 대한 데이터 등록
-    public boolean insertdata( String userid,String cardtype, String skinresult, String ctime, byte[] pet_image){
+    public boolean insertdata( String userid,String cardtype, String skinresult, String skinresult_more, String ctime, byte[] pet_image){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_USER_ID, userid);
         cv.put(COLUMN_TYPE, cardtype);
         cv.put(COLUMN_RESULT, skinresult);
+        cv.put(COLUMN_RESULT_MORE, skinresult_more);
         cv.put(COLUMN_TIME, ctime);
         cv.put(COLUMN_SKIN_IMAGE, pet_image);
 
@@ -88,7 +90,7 @@ public class ResultDB extends SQLiteOpenHelper {
 
         SQLiteDatabase DB = getReadableDatabase();
         String result = "";
-        Cursor cursor = DB.rawQuery("SELECT userid, cardtype, p_result, ctime, skin_image FROM Result_Info WHERE userid = '" +email+ "'ORDER BY userid",null);
+        Cursor cursor = DB.rawQuery("SELECT userid, cardtype, p_result, p_result_more, ctime, skin_image FROM Result_Info WHERE userid = '" +email+ "'ORDER BY ctime",null);
         return cursor;
     }
 

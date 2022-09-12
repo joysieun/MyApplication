@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F2F6DE"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dogicon"/>
+        <TextView
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="체크 결과"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_mycheck"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/hos"
+        />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:id="@+id/tv_mycheck"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:text="모낭염으로 의심됩니다." />
+    <Button
+        android:id="@+id/check_hos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="근처 동물병원 찾기"/>
+
+</LinearLayout>

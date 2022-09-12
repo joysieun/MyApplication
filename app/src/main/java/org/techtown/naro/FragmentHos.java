@@ -1,30 +1,47 @@
 package org.techtown.naro;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.naver.maps.geometry.LatLng;
-import com.naver.maps.map.LocationTrackingMode;
-import com.naver.maps.map.MapView;
-import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.util.FusedLocationSource;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,34 +50,58 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Handler;
 
-public class FragmentHos extends Fragment implements OnMapReadyCallback {
 
-    private MapView mapView;
+public class FragmentHos extends Fragment{
+
+
     public SQLiteDatabase database;
     HospitalDB helper;
-    String DBname = "Hospital";
+    String DBname = "myhospital";
     public Cursor cursor;
-    String cos_lat;
-    String cos_lon;
-    String sin_lon;
-    String sin_lat;
+    Double latitude;
+    Double longitude;
     private HosAdapter adapter;
     RecyclerView recyclerView;
     Location location;
     List<Hospital> dataList;
+    TextView noDataText;
+    double wantdist;
+
+    //아이템 없을 때
+    TextView empty;
+
+    //네이버에서 실시간으로 정보가져오는변수
+    String baseUrl = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=";
+    String seoul = "서울";
+    final Bundle bundle = new Bundle();
+    String searchname;
+    String msg;
+    String name;
+    Handler handler;
+    Boolean isEmpty;
+    ArrayList<String> ING;
 
 
-    private FusedLocationSource locationSource;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private static final String[] PERMISSIONS = {
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
-    };
+
+
+
+    private MapView mapView = null;
+
     private double lat, lan;
     String list;
     List<LatLng> latLngs = new ArrayList<>();
-    private NaverMap naverMap;
+
+    //현재위치 가져오기 위한 변수들
+    private GpsTracker gpsTracker;
+
+    private static final int GPS_ENABLE_REQUEST_CODE =2001;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
 
     public FragmentHos() {
 
@@ -84,106 +125,127 @@ public class FragmentHos extends Fragment implements OnMapReadyCallback {
         helper = new HospitalDB(getActivity());
         database = helper.getWritableDatabase();
 
-        locationSource = new FusedLocationSource(getActivity(), LOCATION_PERMISSION_REQUEST_CODE);
-        mapView = (MapView) rootView.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this); //지도 객체를 얻는것, 함수가 자동으로 호출되면서 매개변수로 naverMap 객체가 전달됨
 
         recyclerView = rootView.findViewById(R.id.recycleview2);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new HosAdapter();
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),1));
+        //외부db copy
         setDB(getActivity());
-        getList(37.541,126.986,5);
 
 
+        if(!checkLocationServicesStatus()){
+            showDialogForLocationServiceSetting();
+        }else{
+            checkRunTimePermission();
+        }
+        //현재위치 가져오기
+        gpsTracker = new GpsTracker(getActivity());
+        latitude = gpsTracker.getLatitude();
+        longitude = gpsTracker.getLongitude();
 
-
+        check(latitude,longitude,1);
         return rootView;
     }
 
-    //카메라 줌이나 이동은 여기에 구현해주기
-    @Override
-    public void onMapReady(@NonNull NaverMap naverMap) {
-
-
-        this.naverMap = naverMap;
-        naverMap.setLocationSource(locationSource); // 현재위치
-        requestPermissions(PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE);
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
-        naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
-            @Override
-            public void onLocationChange(@NonNull Location location) {
-                lat = location.getLatitude();
-                lan = location.getLongitude();
-                Toast.makeText(getActivity().getApplicationContext(), lat + "," + lan+","+dataList.size(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }
-
-    //퍼미션 허락받기기
+    //permission에 대한 메소드
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated()) {
-                naverMap.setLocationTrackingMode(LocationTrackingMode.None);
-                return;
-            } else {
-                naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+        if(requestCode == PERMISSIONS_REQUEST_CODE && grantResults.length == PERMISSIONS.length){
+            boolean check_result = true;
+            for (int result : grantResults){
+                if(result != PackageManager.PERMISSION_GRANTED){
+                    check_result =false;
+                    break;
+                }
+            }
+            if(check_result){
+
+            }else{
+                //퍼미션 허락하지 않은 경우
+                if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),PERMISSIONS[0]) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),PERMISSIONS[1])){
+                    Toast.makeText(getActivity().getApplicationContext(),"퍼미션거부",Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(),"퍼미션거부",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+        }
+    }
+
+    void checkRunTimePermission(){
+        //런타임 퍼미션
+        //위치 퍼미션체크
+        int hasFineLocationPermission = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),Manifest.permission.ACCESS_FINE_LOCATION);
+        int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+        hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
+            //허용
+        }else{
+            if(shouldShowRequestPermissionRationale(PERMISSIONS[0])){
+                Toast.makeText(getActivity().getApplicationContext(),"접근권한 필요",Toast.LENGTH_SHORT).show();
+                requestPermissions(PERMISSIONS,PERMISSIONS_REQUEST_CODE);
+
+            }
+            else{
+                requestPermissions(PERMISSIONS,PERMISSIONS_REQUEST_CODE);
             }
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    //GPS활성화를 위한 메소드
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
-
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mapView.onDestroy();
+    private void showDialogForLocationServiceSetting(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
+        builder.setTitle("위치 서비스 비활성화");
+        builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다. 수정하시겠습니까?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent callGPSsetting = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+                startActivityForResult(callGPSsetting,GPS_ENABLE_REQUEST_CODE);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.create().show();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            case GPS_ENABLE_REQUEST_CODE:
+                if(checkLocationServicesStatus()){
+                    checkRunTimePermission();
+                    return;
+                }
+                break;
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
+    public boolean checkLocationServicesStatus(){
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
 
-    public static final String ROOT_DIR = "/data/data/org.techtown.myapplication/databases";
+
+
+    //외부db 사용하기 위한 메소드들
+    public static final String ROOT_DIR = "/data/data/org.techtown.naro/databases";
 
     public static void setDB(Context ctx) {
         File folder = new File(ROOT_DIR);
@@ -194,12 +256,12 @@ public class FragmentHos extends Fragment implements OnMapReadyCallback {
         }
         AssetManager assetManager = ctx.getResources().getAssets();
         //db파일 이름
-        File outfile = new File(ROOT_DIR + "hospital.db");
+        File outfile = new File(ROOT_DIR + "pethospital.db");
         InputStream is = null;
         FileOutputStream fo = null;
         long filesize = 0;
         try {
-            is = assetManager.open("hospital.db", AssetManager.ACCESS_BUFFER);
+            is = assetManager.open("pethospital.db", AssetManager.ACCESS_BUFFER);
             filesize = is.available();
             if (outfile.length() <= 0) {
                 byte[] tempdata = new byte[(int) filesize];
@@ -217,47 +279,73 @@ public class FragmentHos extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private String buildDistanceQuery(double latitude, double longitude) {
-        final double sinLat = Math.sin(Math.toRadians(latitude));
-        final double cosLat = Math.cos(Math.toRadians(latitude));
-        final double sinLng = Math.sin(Math.toRadians(longitude));
-        final double cosLng = Math.cos(Math.toRadians(longitude));
-        return "(" + cosLat + "*" + cos_lat
-                + "*(" + cos_lon + "*" + cosLng
-                + "+" + sin_lon + "*" + sinLng
-                + ")+" + sinLat + "*" + sin_lat
-                + ")";
+    public void copyDB(Context mcontext){
+        AssetManager manager = mcontext.getAssets();
+        String folderPath = "/data/data/org.techtown.naro/databases";
+
     }
+    public void check(double latitude, double longitude,double distance){
+        adapter.removeAllItem();
+        Cursor cursor = database.rawQuery("select name, tel, onoff, place1, Latitude,Longitude from myhospital",null);
+        cursor.moveToFirst();
 
-    public List<Hospital> getList(double latitude, double longitude, double distance) {
-        setDB(getActivity());
-        dataList = new ArrayList<Hospital>();
-
-        helper = new HospitalDB(getActivity());
-        database = helper.getWritableDatabase();
-
-        String selectQuery = "SELECT *" + "," + buildDistanceQuery(latitude,longitude)
-                + " AS partial_distance"
-                + " FROM " + DBname
-                + " WHERE partial_distance >= "
-                + Math.cos(distance/6371);
-
-        Cursor cursor = database.rawQuery(selectQuery,null);
-        int count =0;
-        while (cursor.moveToNext()){
-
+        int count=0;
+        while(cursor.moveToNext()){
+            Double lat = cursor.getDouble(4);
+            Double lan = cursor.getDouble(5);
+            String tel = cursor.getString(1);
             Hospital hospital = new Hospital();
-            hospital.setHosname(cursor.getString(1));
-            hospital.setHosaddress(cursor.getString(2));
-            hospital.setHosonoff(cursor.getString(3));
-            dataList.add(hospital);
-            count++;
+            wantdist =distance(latitude,longitude,lat,lan,"kilometer");
+            if(wantdist <= distance){
+                hospital.setHosname(cursor.getString(0));
+                hospital.setTel(tel);
+                hospital.setHoslatitude(lat);
+                hospital.setHoslongitude(lan);
+                hospital.setHosaddress(cursor.getString(3));
+                hospital.setHosonoff(String.format("%.2f",wantdist)+"km");
+                adapter.addItem(hospital);
+                count++;
+            }
 
         }
         cursor.close();
-        return dataList;
 
     }
+
+
+    //거리 계산메소드
+    private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+
+        if (unit == "kilometer") {
+            dist = dist * 1.609344;
+        } else if(unit == "meter"){
+            dist = dist * 1609.344;
+        }
+
+        return (dist);
+    }
+
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
+
+
+
+
 
 }
 

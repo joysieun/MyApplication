@@ -5,38 +5,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".FragmentMypage">
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:id="@+id/onusername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:backgroundTint="#AEEF63"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#F2F6DE">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/onusername"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Health Care 일지"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:backgroundTint="#AEEF63"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_marginLeft="170dp"
+            android:id="@+id/pluscare"
+            android:background="@drawable/btn_green"
+            android:layout_width="55dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="45dp"
+            android:text="+ 케어"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
 
         android:layout_width="match_parent"
         android:id="@+id/recycleview"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-    <LinearLayout
-        android:gravity="right"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/pluscare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ 케어"/>
-        <Button
-            android:id="@+id/plusmemo"
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ 메모"/>
-    </LinearLayout>
+        android:layout_weight="1"
+        android:scrollbars="vertical"/>
+
 
 </LinearLayout>
