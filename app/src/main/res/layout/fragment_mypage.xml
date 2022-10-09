@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#F2F6DE">
+        android:background="#EEF7FB">
+
 
         <TextView
             android:layout_marginLeft="10dp"
@@ -25,6 +26,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_marginLeft="170dp"
             android:id="@+id/pluscare"
+            android:textColor="@color/white"
             android:background="@drawable/btn_green"
             android:layout_width="55dp"
             android:layout_marginTop="6dp"

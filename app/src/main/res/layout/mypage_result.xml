@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F2F6DE"
+    android:background="#EEF7FB"
     >
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#CCDFB6"
+        android:background="#BFE1F4"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         />
     <LinearLayout
@@ -70,6 +70,7 @@
 
             android:layout_marginLeft="220dp"
             android:text="메모추가"
+            android:textColor="@color/white"
             android:background="@drawable/btn_green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
