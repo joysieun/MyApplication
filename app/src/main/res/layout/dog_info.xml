@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#F2F6DE">
+    android:background="#EEF7FB">
     <TextView
 
         android:layout_width="match_parent"
@@ -139,6 +139,7 @@
             android:layout_height="wrap_content"
             android:text="취소"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:background="@drawable/btn_green"
             android:textStyle="bold"
             />
@@ -146,6 +147,7 @@
             android:layout_marginLeft="35dp"
             android:id="@+id/btn_savedoginfo"
             android:layout_width="wrap_content"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:text="등록"
             android:layout_gravity="center"

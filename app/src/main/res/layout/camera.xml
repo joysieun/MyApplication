@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#F2F6DE"
+    android:background="#EEF7FB"
     android:layout_height="match_parent"
     tools:context=".Camera">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#CCDFB6"
+        android:background="#BFE1F4"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-
         />
     <LinearLayout
         android:layout_marginLeft="10dp"
@@ -41,14 +41,16 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/layout_background">
+
         <ImageView
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
             android:id="@+id/skin_image"
             android:layout_width="250dp"
             android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground"/>
+            android:src="@drawable/ic_launcher_foreground" />
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +64,7 @@
                 android:id="@+id/camera"
                 android:textStyle="bold"
                 android:layout_width="120dp"
-                android:background="@drawable/btn_yell"
+                android:background="#BFE1F4"
                 android:layout_height="wrap_content"
                 android:text="카메라"/>
 
@@ -72,7 +74,7 @@
                 android:id="@+id/select"
                 android:textStyle="bold"
                 android:layout_width="120dp"
-                android:background="@drawable/btn_yell"
+                android:background="#BFE1F4"
                 android:layout_height="wrap_content"
                 android:text="이미지"/>
 
@@ -96,15 +98,16 @@
                 android:text="이미지 확인 후 시작 버튼을 눌러주세요."
                 android:textColor="#777575"
                 android:textSize="10sp" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/reset"
+                android:layout_width="70dp"
+                android:layout_height="27dp"
                 android:layout_gravity="right"
                 android:layout_marginLeft="5dp"
-                android:textSize="10sp"
-                android:layout_width="70dp"
-                android:layout_height="35sp"
-                android:background="@drawable/btn_yell"
-                android:text="재선택"/>
+                android:background="#E5F3FB"
+                android:text="재선택"
+                android:textSize="10sp" />
         </LinearLayout>
 
 
@@ -118,6 +121,7 @@
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:textSize="20sp"
+        android:textColor="@color/white"
         android:background="@drawable/btn_green"
         android:text="체크시작"/>
 

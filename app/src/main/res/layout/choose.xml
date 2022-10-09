@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F2F6DE"
+    android:background="#EEF7FB"
     >
 
     <LinearLayout
@@ -49,12 +49,14 @@
             android:id="@+id/btn_vacci"
             android:layout_marginLeft="70dp"
             android:background="@drawable/btn_green"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="예방접종"/>
         <androidx.appcompat.widget.AppCompatButton
 
             android:id="@+id/btn_care"
+            android:textColor="@color/white"
             android:layout_marginLeft="50dp"
             android:background="@drawable/btn_green"
             android:layout_width="wrap_content"

@@ -42,6 +42,11 @@ public class Chatting extends Activity {
 
     ChatAdapter chatAdapter;
 
+    //자동스크롤
+    private boolean mShouldScroll;
+    private int mToPosition;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +54,9 @@ public class Chatting extends Activity {
         setContentView(R.layout.chatting_frame);
 
         //현재시간
-        Date currentTime = Calendar.getInstance().getTime();
+        Date currentTime1 = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        time = dateFormat.format(currentTime);
+        time = dateFormat.format(currentTime1);
 
         //사용자 이름
         firebaseAuth = FirebaseAuth.getInstance();
@@ -66,8 +71,10 @@ public class Chatting extends Activity {
 
         layoutManager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
+
         chatAdapter = new ChatAdapter(chatList);
         recyclerView.setAdapter(chatAdapter);
+
 
 
 
@@ -85,9 +92,9 @@ public class Chatting extends Activity {
             public void onClick(View view) {
                 String msg = et_chat.getText().toString();
 
-                Date currentTime = Calendar.getInstance().getTime();
+                Date currentTime2 = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                current_time = dateFormat.format(currentTime);
+                current_time = dateFormat.format(currentTime2);
 
                 et_chat.setText(null);
                 chatList.add(new Chat(name, msg, current_time, Chatcode.ViewType.RIGHT_CONTENT));
@@ -116,11 +123,13 @@ public class Chatting extends Activity {
         super.onResume();
     }
     public void naro_answer(){
-        Date currentTime = Calendar.getInstance().getTime();
+        Date currentTime3 = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        current_time2 = dateFormat.format(currentTime);
+        current_time2 = dateFormat.format(currentTime3);
         chatList.add(new Chat("naro-bot","동물병원에 방문하세요",current_time2,Chatcode.ViewType.LEFT_CONTENT));
 
         chatAdapter.notifyDataSetChanged();
     }
+
+
 }

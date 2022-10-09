@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -223,10 +222,10 @@ public class HosMap extends AppCompatActivity implements OnMapReadyCallback {
                         if (tt.size() == 0) {
                             tt.add("0");
                             tt.add("0");
-                            tt.add("전화로 문의하세요");
+                            tt.add("전화로 문의주세요");
                         }
                         if (tt.size()==2){
-                            tt.add("전화로 문의하세요");
+                            tt.add("전화로 문의주세요");
                         }
                         onoff.setText(tt.get(2));
 
