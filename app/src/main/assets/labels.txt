@@ -1,4 +1,4 @@
-keratitis
-corneal ulcer
-cataract
-nuclear sclerosis
+folliculitis
+Impetigo
+Ring worm
+normal
