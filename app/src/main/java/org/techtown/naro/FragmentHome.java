@@ -84,14 +84,14 @@ public class FragmentHome extends Fragment {
             }
         });
 
-        chatting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),Chatting.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-            }
-        });
+//         chatting.setOnClickListener(new View.OnClickListener() {
+//             @Override
+//             public void onClick(View view) {
+//                 Intent intent = new Intent(getActivity(),Chatting.class);
+//                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                 startActivity(intent);
+//             }
+//         });
         btn_guide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
